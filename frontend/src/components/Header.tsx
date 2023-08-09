@@ -15,7 +15,7 @@ export function Header() {
         </Link>
 
         <Link href='/entrar' className='text-cyan-700'>
-          Quero criar uma vaga
+          Entrar na conta
         </Link>
       </div>
     </header>
