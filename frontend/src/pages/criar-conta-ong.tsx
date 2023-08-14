@@ -1,6 +1,6 @@
 import { Header } from '@/components/Header';
 
-export default function CriarConta() {
+export default function CriarContaOng() {
   return (
     <>
       <Header />
@@ -20,7 +20,7 @@ export default function CriarConta() {
               />
             </label>
 
-            <div className='flex'>
+            <div className='flex justify-between'>
               <label className='flex flex-col gap-2'>
                 Imagem destaque:
                 <input type='file' />

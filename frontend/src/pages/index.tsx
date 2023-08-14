@@ -1,6 +1,7 @@
 import { Header } from '@/components/Header';
 import { Inter } from 'next/font/google';
 import Link from 'next/link';
+import { MagnifyingGlass } from 'phosphor-react';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -10,6 +11,20 @@ export default function Home() {
       <Header />
 
       <main className='max-w-5xl w-full mx-auto px-4'>
+        <div className='h-80 bg-neutral-800'></div>
+
+        <form className='mt-5 flex gap-4'>
+          <input
+            id='search'
+            type='text'
+            className='p-4 rounded border border-neutral-300 bg-transparent w-full'
+            placeholder='Cuidador de animais asquerosos e peçonhentos'
+          />
+          <button className='bg-cyan-700 text-neutral-50 px-8 rounded hover:bg-cyan-600 transition-colors'>
+            <MagnifyingGlass className='w-5 h-5' />
+          </button>
+        </form>
+
         <div className='my-10'>
           <h2 className='text-2xl font-bold text-cyan-700 mb-6'>
             Vagas disponíveis
@@ -60,16 +75,6 @@ export default function Home() {
           </div>
         </div>
       </main>
-
-      <div className='mx-auto flex min-h-screen max-w-screen-sm items-center justify-center'>
-        <div className='h-36 w-full rounded-lg bg-gradient-to-r from-green-500 via-green-500 to-yellow-400 p-1'>
-          <div className='flex h-full w-full items-center justify-center bg-gray-800 back rounded-lg'>
-            <h1 className='text-2xl font-black text-white px-4'>
-              the quick brown fox jumps over the lazy dog
-            </h1>
-          </div>
-        </div>
-      </div>
     </div>
   );
 }
