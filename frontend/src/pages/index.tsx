@@ -1,7 +1,9 @@
 import { Header } from '@/components/Header';
 import { Inter } from 'next/font/google';
+import Image from 'next/image';
 import Link from 'next/link';
 import { MagnifyingGlass } from 'phosphor-react';
+import volunteerImg from '../../public/voluntarios2.jpg';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -11,7 +13,13 @@ export default function Home() {
       <Header />
 
       <main className='max-w-5xl w-full mx-auto px-4'>
-        <div className='h-80 bg-neutral-800'></div>
+        <div className='h-80'>
+          <Image
+            src={volunteerImg}
+            alt='Voluntários'
+            className='w-full h-full object-cover object-center rounded-lg'
+          />
+        </div>
 
         <form className='mt-5 flex gap-4'>
           <input

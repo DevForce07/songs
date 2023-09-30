@@ -1,5 +1,8 @@
 import { Header } from '@/components/Header';
 import { WhatsappLogo } from 'phosphor-react';
+import Image from 'next/image';
+
+import volunteerImg from '../../../public/voluntarios.jpg';
 
 export default function OngProfile() {
   return (
@@ -7,7 +10,13 @@ export default function OngProfile() {
       <Header />
 
       <main className='max-w-4xl w-full mx-auto px-4'>
-        <div className='h-80 bg-neutral-800'></div>
+        <div className='h-80'>
+          <Image
+            src={volunteerImg}
+            alt='Voluntários'
+            className='w-full h-full object-cover object-center rounded-lg'
+          />
+        </div>
 
         <div className='mt-10'>
           <h1 className='text-3xl font-bold mb-6 text-cyan-700'>ONG do Bem</h1>
