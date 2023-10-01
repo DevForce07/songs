@@ -1,0 +1,70 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.0.2'
+	id 'io.spring.dependency-management' version '1.1.0'
+	id 'eclipse'
+	id 'idea'
+}
+
+group = 'br.com.songs'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '17'
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	 mavenCentral()
+	 maven {
+	  url "https://plugins.gradle.org/m2/"
+	}
+	google()
+}
+
+dependencies {
+
+	// spring dependencies
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation("io.jsonwebtoken:jjwt-api:0.11.2")
+    implementation("io.jsonwebtoken:jjwt-impl:0.11.2")
+    implementation("io.jsonwebtoken:jjwt-jackson:0.11.2")
+    
+    
+	// util dependencies
+	implementation 'org.apache.commons:commons-lang3:3.12.0'
+	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+	compileOnly 'org.projectlombok:lombok'
+	compileOnly("org.springframework.boot:spring-boot-devtools")
+	    
+	// database dependencies
+	compileOnly "org.flywaydb:flyway-core"
+	compileOnly "org.flywaydb:flyway-mysql"
+	implementation 'com.mysql:mysql-connector-j:8.0.33'
+
+	
+	// test dependencies
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation("org.assertj:assertj-core:3.11.1")
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+    testImplementation "org.mockito:mockito-core:3.+"
+	testImplementation("org.assertj:assertj-core:3.11.1")
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+}
+
+bootJar {
+	mainClass = 'br.com.songs.SongsApplicationStart'
+}
+
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
