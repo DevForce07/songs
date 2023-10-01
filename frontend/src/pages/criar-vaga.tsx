@@ -6,6 +6,7 @@ export default function CriarVaga() {
       <Header />
 
       <div className='max-w-3xl w-full mx-auto'>
+
         <h1 className='text-3xl my-8 font-bold'>Crie a vaga</h1>
 
         <main className='mb-8'>
@@ -16,17 +17,19 @@ export default function CriarVaga() {
                 id='title'
                 type='text'
                 className='p-4 rounded border border-neutral-300 bg-transparent w-full'
-                placeholder='Cuidador de animais asquerosos e peçonhentos'
+                placeholder='Ex: Cuidador de animais'
+
               />
             </label>
 
             <label htmlFor='description' className='flex flex-col gap-2'>
-              Descrição da vaga:
+              Descrição:
               <textarea
                 id='description'
-                className='p-4 rounded border border-neutral-300 bg-transparent w-full resize-none'
-                placeholder='lorem ipsum dolor sit amet'
-              />
+                className='p-4 rounded border border-neutral-300 bg-transparent w-full resize-none h-32'
+                placeholder='Descreva aqui tudo sobre a vaga'
+              ></textarea>
+
             </label>
 
             <label htmlFor='quantity' className='flex flex-col gap-2'>
@@ -34,13 +37,14 @@ export default function CriarVaga() {
               <input
                 id='quantity'
                 type='number'
-                className='p-4 rounded border border-neutral-300 bg-transparent w-40'
-                placeholder='1'
+                className='p-4 rounded border border-neutral-300 bg-transparent w-full'
+                placeholder='Ex: 3'
+
               />
             </label>
 
             <button className='bg-cyan-700 p-4 rounded text-neutral-50 font-bold hover:bg-cyan-800 transition-colors'>
-              Criar vaga
+              Criar
             </button>
           </form>
         </main>
