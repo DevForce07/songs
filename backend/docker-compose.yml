@@ -15,11 +15,11 @@ services:
       - "3306:3306"
     volumes:
       - dbdata:/var/lib/mysql
-   adminer:
+  adminer:
     image: adminer
     restart: always
     ports:
-      - 5000:8080
+    - 5000:8080
   # alfresco:
   #   image: docker.io/alfresco/alfresco-content-repository-community:7.4.1.1
   #   mem_limit: 1900m
