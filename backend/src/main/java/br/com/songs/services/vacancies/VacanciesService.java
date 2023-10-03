@@ -16,8 +16,6 @@ public interface VacanciesService {
 
     List<VacanciesRequestGetDTO> findAll(Pageable pageable);
 
-    List<VacanciesRequestGetDTO> findByTitle(String name, Pageable pageable);
-
     List<VacanciesRequestGetDTO>  findByIdOng(long id, Pageable pageable);
 
     VacanciesRequestGetDTO saveOng(VacanciesRequestPostDTO vacanciesRequestPostDTO);

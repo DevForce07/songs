@@ -64,17 +64,6 @@ public class VacanciesServiceImpl implements VacanciesService {
     }
 
     @Override
-    public List<VacanciesRequestGetDTO> findByTitle(String name, Pageable pageable) {
-        List<Vacancies> vacanciesList = repository.findAllByTitleContainsIgnoreCase(name, pageable).getContent();
-
-        if(vacanciesList == null || vacanciesList.isEmpty()){
-            return new ArrayList<>();
-        }
-
-        return convertVacancies(vacanciesList);
-    }
-
-    @Override
     public List<VacanciesRequestGetDTO> findByIdOng(long id, Pageable pageable) {
         List<Vacancies> vacanciesList = repository.findAllByIdOng(id, pageable);
 

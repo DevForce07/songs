@@ -42,15 +42,6 @@ public class VacanciesController {
 
 	@ApiResponse(responseCode = "200", description = "find ong by id", content = {
 			@Content(mediaType = "application/json", schema = @Schema(implementation = VacanciesRequestGetDTO.class)) })
-	@GetMapping("/findByTitle/{title}")
-	public ResponseEntity<?> findByTitle(@PathVariable("title") String title, @RequestParam(defaultValue = "0") int page,@RequestParam(defaultValue = "10") int size) {
-		Pageable pageable = PageableUtil.getPageable(page, size);
-		List<VacanciesRequestGetDTO> vacanciesRequestGetDTOList = vacanciesService.findByTitle(title, pageable);
-		return new ResponseEntity<>(vacanciesRequestGetDTOList, HttpStatus.CREATED);
-	}
-
-	@ApiResponse(responseCode = "200", description = "find ong by id", content = {
-			@Content(mediaType = "application/json", schema = @Schema(implementation = VacanciesRequestGetDTO.class)) })
 	@GetMapping("/findByIdOng/{id}")
 	public ResponseEntity<?> findByIdOng(@PathVariable("id") long id, @RequestParam(defaultValue = "0") int page,@RequestParam(defaultValue = "10") int size) {
 		Pageable pageable = PageableUtil.getPageable(page, size);

@@ -29,4 +29,6 @@ public class EmployeeRequestGetDTO {
 	private long ongEmployeeId;
 
 	private char sex;
+
+	private boolean isAdmin;
 }

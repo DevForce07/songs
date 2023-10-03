@@ -42,12 +42,12 @@ public class LoginController {
 		responseHeaders.set("token", authenticateAndGenerateToken.getToken());
 		PerfilOngRequestGetDTO perfil = authenticateAndGenerateToken.getUserDTO();
 
-		if(!perfil.getOngs().isEmpty()){
-			perfil.getOngs().stream().forEach(e->{
-				logSystemService.createLog(LogSystem.LOGIN,e.getId(), e.getId(), "novo login");
-			});
-
-		}
+//		if(!perfil.getOngs().isEmpty()){
+//			perfil.getOngs().stream().forEach(e->{
+//				logSystemService.createLog(LogSystem.LOGIN,e.getId(), e.getId(), "novo login");
+//			});
+//
+//		}
 
 		return new ResponseEntity<>(authenticateAndGenerateToken, responseHeaders,
 				HttpStatus.OK);
