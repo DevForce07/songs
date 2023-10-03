@@ -96,6 +96,17 @@ public class EmployeePerfilServiceImpl implements EmployeePerfilService{
         return employeePerfils.stream().map(PerfilConverter::employeeEntityToConvertEmployeeRequestGetDTO).collect(Collectors.toList());
     }
 
+    @Override
+    public EmployeeRequestGetDTO findById(long id) {
+        EmployeePerfil byId = userRepository.findByIdEmplloyee(id);
+
+        if(byId == null){
+            throw new OperationException("user not found");
+        }
+
+        return employeeEntityToConvertEmployeeRequestGetDTO(byId);
+    }
+
     private void checkoutIfExistsOng(EmployeePerfil employeePerfil){
         try{
             ongService.findById(employeePerfil.getOngEmployeeId());

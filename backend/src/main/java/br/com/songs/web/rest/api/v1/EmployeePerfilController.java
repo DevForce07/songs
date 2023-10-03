@@ -38,6 +38,13 @@ public class EmployeePerfilController {
 		return new ResponseEntity<>(userService.findAllUsersByIdOng(id), HttpStatus.OK);
 	}
 
+	@ApiResponse(responseCode = "200", description = "create a new Ong", content = {
+			@Content(mediaType = "application/json", schema = @Schema(implementation = OngRequestGetDTO.class)) })
+	@GetMapping("/findById/{id}")
+	public ResponseEntity<?> findById(@PathVariable("id") long id) {
+		return new ResponseEntity<>(userService.findById(id), HttpStatus.OK);
+	}
+
 	@SecurityRequirement(name = "Bearer Authentication")
 	@ApiResponse(responseCode = "200", description = "create a new User", content = {
 			@Content(mediaType = "application/json", schema = @Schema(implementation = AdminOngRequestPostDTO.class)) })
