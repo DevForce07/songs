@@ -19,6 +19,8 @@ public interface EmployeePerfilService {
 
 	List<EmployeeRequestGetDTO> findAllUsersByIdOng(long id);
 
+	EmployeeRequestGetDTO findById(long id);
+
 	void deleteUserCurrent();
 
 	void deleteUserById(long id);

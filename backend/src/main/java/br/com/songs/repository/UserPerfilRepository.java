@@ -20,4 +20,8 @@ public interface UserPerfilRepository extends JpaRepository<Perfil, Long> {
 	boolean existsPerfilByEmail(@Param("email") String email);
 	@Query(value = "SELECT p FROM EmployeePerfil p WHERE p.ongEmployeeId = :id")
 	List<EmployeePerfil> findByIdOngEmplloyee(@Param("id") long id);
+
+	@Query(value = "SELECT p FROM EmployeePerfil p WHERE p.id = :id")
+	EmployeePerfil findByIdEmplloyee(@Param("id") long id);
+
 }
