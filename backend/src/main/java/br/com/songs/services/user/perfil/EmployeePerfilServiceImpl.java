@@ -81,9 +81,9 @@ public class EmployeePerfilServiceImpl implements EmployeePerfilService{
         }
 
 
-        employeePerfil.setPassword(userLogged.get().getPassword());
         checkoutIfExistsOng(employeePerfil);
         checkFieldsFromUser(employeePerfil,true);
+        employeePerfil.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         EmployeePerfil ongPerfil = userRepository.save(employeePerfil);
         logSystemService.createLog(LogSystem.CREATE_EMPLOYEES, ongPerfil.getOngEmployeeId(), userLoggedService.getUserLogged().get().getId(), "create empĺoyee");
         return employeeEntityToConvertEmployeeRequestGetDTO(ongPerfil);

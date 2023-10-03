@@ -36,8 +36,7 @@ public class Perfil implements Serializable {
     @Column(nullable = false)
     private String document;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "perfil", cascade = {CascadeType.MERGE, CascadeType.DETACH , CascadeType.REFRESH})
-    private List<Ong> ongs;
+
     @Transient
     public PerfilDecriminator getDecriminatorValue() {
         String value = this.getClass().getAnnotation(DiscriminatorValue.class).value();
@@ -61,6 +60,10 @@ public class Perfil implements Serializable {
         public boolean isEmployee(){
             return EMPLOYEE.equals(this);
         }
+    }
+
+    public List<Ong> getOngs(){
+        return null;
     }
 
 }

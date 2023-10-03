@@ -22,4 +22,6 @@ public class AdminOngRequestGetDTO {
 	private String cpf;
 
 	private List<OngRequestGetDTO> ongs;
+
+	private boolean isAdmin;
 }

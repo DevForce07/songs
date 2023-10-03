@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @AllArgsConstructor
@@ -23,4 +25,12 @@ public class EmployeePerfil extends Perfil{
 
     @Column(name = "ong_employee")
     private long ongEmployeeId;
+
+    @Transient
+    private List<Ong> ongs;
+
+    @Override
+    public List<Ong> getOngs(){
+        return ongs == null ? new ArrayList<>():ongs;
+    }
 }
