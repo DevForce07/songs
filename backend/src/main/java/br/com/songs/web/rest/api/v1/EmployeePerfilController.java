@@ -40,7 +40,7 @@ public class EmployeePerfilController {
 
 	@ApiResponse(responseCode = "200", description = "create a new Ong", content = {
 			@Content(mediaType = "application/json", schema = @Schema(implementation = OngRequestGetDTO.class)) })
-	@GetMapping("/findAllById/{id}")
+	@GetMapping("/findById/{id}")
 	public ResponseEntity<?> findById(@PathVariable("id") long id) {
 		return new ResponseEntity<>(userService.findById(id), HttpStatus.OK);
 	}
