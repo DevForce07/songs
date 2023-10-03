@@ -49,7 +49,7 @@ public class PerfilConverter {
     }
 
     public static AdminOngRequestGetDTO adminOngEntityToConvertUserOngRequestGetDTO(AdminOngPerfil user){
-        return AdminOngRequestGetDTO.builder().id(user.getId()).email(user.getEmail()).name(user.getName()).cpf(user.getDocument()).build();
+        return AdminOngRequestGetDTO.builder().id(user.getId()).email(user.getEmail()).name(user.getName()).cpf(user.getDocument()).isAdmin(user.getDecriminatorValue().isAdmin()).build();
     }
     public static AdminOngPerfil convertUserOngRequestPostDTOToAdminOngEntity(AdminOngRequestPostDTO userDTO){
         return AdminOngPerfil.builder().email(userDTO.getEmail()).name(userDTO.getName()).document(userDTO.getCpf()).password(userDTO.getPassword()).build();
@@ -60,7 +60,7 @@ public class PerfilConverter {
     }
 
     public static EmployeeRequestGetDTO employeeEntityToConvertEmployeeRequestGetDTO(EmployeePerfil user){
-        return EmployeeRequestGetDTO.builder().id(user.getId()).email(user.getEmail()).name(user.getName()).cpf(user.getDocument()).birthDate(user.getBirthDate()).ongEmployeeId(user.getOngEmployeeId()).sex(user.getSex()) .build();
+        return EmployeeRequestGetDTO.builder().id(user.getId()).email(user.getEmail()).name(user.getName()).cpf(user.getDocument()).birthDate(user.getBirthDate()).ongEmployeeId(user.getOngEmployeeId()).sex(user.getSex()).isAdmin(user.getDecriminatorValue().isAdmin()) .build();
     }
     public static EmployeePerfil convertEmployeeRequestPostDTOToEmployeeEntity(EmployeeRequestPostDTO userDTO){
         return EmployeePerfil.builder().email(userDTO.getEmail()).name(userDTO.getName()).document(userDTO.getCpf()).password(userDTO.getPassword()).birthDate(userDTO.getBirthDate()).ongEmployeeId(userDTO.getOngEmployeeId()).sex(userDTO.getSex()) .build();
@@ -76,7 +76,7 @@ public class PerfilConverter {
 
     public static PerfilOngRequestGetDTO convertPerfilEntityToPerfilRequestGetDTO(Perfil user) {
         List<OngRequestGetDTO> ongRequestGetDTOS = user.getOngs().stream().map(PerfilConverter::convertUserOngEntityToUserOngRequestGetDTO).collect(Collectors.toList());
-        return PerfilOngRequestGetDTO.builder().id(user.getId()).email(user.getEmail()).name(user.getName()).cpf(user.getDocument()).ongs(ongRequestGetDTOS).build();
+        return PerfilOngRequestGetDTO.builder().id(user.getId()).email(user.getEmail()).name(user.getName()).cpf(user.getDocument()).ongs(ongRequestGetDTOS).isAdmin(user.getDecriminatorValue().isAdmin()).build();
     }
 
     public static OngRequestGetDTO convertUserOngEntityToUserOngRequestGetDTO(Ong user) {

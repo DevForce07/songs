@@ -68,12 +68,8 @@ public class AuthenticateAndManagerTokenServiceImpl implements AuthenticateAndMa
 
 	private PerfilOngRequestGetDTO convertPerfilEntityToPerfilRequestGetDTO(Perfil user) {
 		List<OngRequestGetDTO> ongRequestGetDTOS = null;
-		if(user.getOngs() != null){
-			ongRequestGetDTOS = user.getOngs().stream().map(this::convertUserEntityToUserDto).collect(Collectors.toList());
 
-		}
-
-		return PerfilOngRequestGetDTO.builder().id(user.getId()).email(user.getEmail()).name(user.getName()).cpf(user.getDocument()).ongs(ongRequestGetDTOS).build();
+		return PerfilOngRequestGetDTO.builder().id(user.getId()).email(user.getEmail()).name(user.getName()).cpf(user.getDocument()).ongs(ongRequestGetDTOS).isAdmin(user.getDecriminatorValue().isAdmin()).build();
 	}
 
 	private OngRequestGetDTO convertUserEntityToUserDto(Ong user) {

@@ -123,6 +123,12 @@ public class OngServiceImpl implements OngService {
 
     @Override
     public void deleteOngById(long id) {
+        Optional<Perfil> userLogged = userLoggedService.getUserLogged();
+
+        if(userLogged.isEmpty() || !userLogged.get().getDecriminatorValue().isAdmin()){
+            throw new UserNotFoundException("User admin not found");
+        }
+
         OngRequestGetDTO requestGetDTO = findById(id);
         repository.deleteById(requestGetDTO.getId());
     }
