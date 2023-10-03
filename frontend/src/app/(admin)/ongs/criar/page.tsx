@@ -4,6 +4,7 @@ import { AuthContext } from '@/contexts/auth-context';
 import { api } from '@/lib/axios';
 import { redirect, useRouter } from 'next/navigation';
 import { ChangeEvent, FormEvent, useContext, useState } from 'react';
+import toast from 'react-hot-toast';
 import InputMask from 'react-input-mask';
 
 const actingAreas = [
@@ -96,13 +97,13 @@ export default function CriarOng() {
       });
 
       if (response.status === 201) {
-        alert('ONG criada com sucesso!');
+        toast.success('ONG criada com sucesso!');
 
         router.push('/ongs');
       }
     } catch (error: any) {
       console.log(error);
-      alert(error.response.data.details);
+      toast.error(error.response.data.details);
     }
   }
 

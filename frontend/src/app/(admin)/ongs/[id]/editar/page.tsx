@@ -4,6 +4,7 @@ import { AuthContext } from '@/contexts/auth-context';
 import { api } from '@/lib/axios';
 import { redirect, useParams, useRouter } from 'next/navigation';
 import { ChangeEvent, FormEvent, useContext, useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 import InputMask from 'react-input-mask';
 
 const actingAreas = [
@@ -130,13 +131,13 @@ export default function EditarOng() {
       });
 
       if (response.status === 200) {
-        alert('ONG editada com sucesso!');
+        toast.success('ONG editada com sucesso!');
         router.refresh();
         router.push('/ongs');
       }
     } catch (error: any) {
       console.log(error);
-      alert(error.response.data.details);
+      toast.error(error.response.data.details);
     }
   }
 

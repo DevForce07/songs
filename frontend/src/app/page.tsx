@@ -8,6 +8,7 @@ import { Ong, Vacancy } from '@/types';
 import { api } from '@/lib/axios';
 import Link from 'next/link';
 import { VacancyCard } from '@/components/vacancy-card';
+import toast from 'react-hot-toast';
 
 export default function Home() {
   const [vacancies, setVacancies] = useState<Vacancy[]>([]);
@@ -33,7 +34,7 @@ export default function Home() {
   async function searchVacancies(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    if (!search) return alert('Digite algo para pesquisar');
+    if (!search) return toast.error('Digite algo para pesquisar');
 
     const response = await api.get(`/vacancies/findByTitle/${search}`);
 

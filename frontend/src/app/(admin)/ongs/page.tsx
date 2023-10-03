@@ -7,6 +7,7 @@ import { Eye, Frown, Pencil, Plus, Trash } from 'lucide-react';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { useContext, useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 
 export default function Ongs() {
   const { isAuthenticaded, user, isAuthLoading } = useContext(AuthContext);
@@ -17,17 +18,29 @@ export default function Ongs() {
     redirect('/entrar');
   }
 
+  async function getOngsByEmployeeId() {
+    try {
+      const response = await api.get(`/ongs/findById/${user?.ongEmployeeId}`);
+
+      setOngs(response.data);
+      setIsLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   useEffect(() => {
     setOngs(user?.ongs! || []);
+    getOngsByEmployeeId();
 
     setIsLoading(false);
   }, [ongs]);
 
-  async function deleteOng(id: number) {
+  async function handleDeleteOng(id: number) {
     const response = await api.delete(`/ongs/deleteById/${id}`);
 
     if (response.status === 200) {
-      alert('ONG deletada com sucesso!');
+      toast.success('ONG deletada com sucesso!');
       window.location.reload();
     }
   }
@@ -38,15 +51,17 @@ export default function Ongs() {
         <div className='flex-1 flex flex-col items-center mt-6 gap-12'>
           <h1 className='text-3xl mt-8 font-bold'>Gerenciar ONGs</h1>
 
-          <div className='flex flex-col w-full max-w-md px-4 gap-4'>
-            <Link
-              className='flex items-center justify-center gap-2 border border-cyan-700 p-4 w-full rounded text-cyan-700 font-bold hover:bg-cyan-800 hover:text-neutral-100 transition-colors'
-              href='/ongs/criar'
-            >
-              <Plus className='w-6 h-6' />
-              Criar nova ONG
-            </Link>
-          </div>
+          {user?.admin && (
+            <div className='flex flex-col w-full max-w-md px-4 gap-4'>
+              <Link
+                className='flex items-center justify-center gap-2 border border-cyan-700 p-4 w-full rounded text-cyan-700 font-bold hover:bg-cyan-800 hover:text-neutral-100 transition-colors'
+                href='/ongs/criar'
+              >
+                <Plus className='w-6 h-6' />
+                Criar nova ONG
+              </Link>
+            </div>
+          )}
 
           {isLoading ? (
             <div className='flex justify-center items-center mt-4'>
@@ -82,7 +97,7 @@ export default function Ongs() {
                     <button
                       onClick={() =>
                         confirm('Tem certeza que deseja deletar essa ONG?') &&
-                        deleteOng(ong.id)
+                        handleDeleteOng(ong.id)
                       }
                       className='p-4 py-2 bg-red-600 font-bold rounded text-neutral-50 flex items-center justify-center lg:justify-start gap-2 hover:bg-red-700 transition-colors'
                     >
@@ -96,7 +111,7 @@ export default function Ongs() {
           ) : (
             <h3 className='text-xl font-bold mb-2 text-center mt-20 text-neutral-300'>
               <Frown className='w-12 h-12 mx-auto mb-2' />
-              Nenhuma vaga disponível
+              Nenhuma ONG encontrada
             </h3>
           )}
           {/* </div> */}

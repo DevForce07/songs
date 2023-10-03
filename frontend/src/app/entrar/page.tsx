@@ -4,6 +4,7 @@ import { AuthContext } from '@/contexts/auth-context';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { ChangeEvent, FormEvent, useContext, useState } from 'react';
+import toast from 'react-hot-toast';
 
 export default function Entrar() {
   const [userData, setUserData] = useState({
@@ -34,7 +35,7 @@ export default function Entrar() {
     const { email, password } = userData;
 
     if (!email || !password) {
-      alert('Preencha todos os campos');
+      toast.error('Preencha todos os campos');
       setIsLoading(false);
       return;
     }
@@ -44,7 +45,7 @@ export default function Entrar() {
       setIsLoading(false);
     } catch (error: any) {
       console.log(error);
-      alert(error.response.data.details);
+      toast.error(error.response.data.details);
       setIsLoading(false);
     } finally {
       setIsLoading(false);

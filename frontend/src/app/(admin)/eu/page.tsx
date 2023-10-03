@@ -3,7 +3,8 @@
 import { AuthContext } from '@/contexts/auth-context';
 import { api } from '@/lib/axios';
 import { redirect, useRouter } from 'next/navigation';
-import { ChangeEvent, useContext, useState } from 'react';
+import { ChangeEvent, useContext, useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 import InputMask from 'react-input-mask';
 
 export default function Eu() {
@@ -16,6 +17,12 @@ export default function Eu() {
       </div>
     );
   }
+
+  useEffect(() => {
+    // window.location.reload();
+  }, [isAuthenticaded]);
+
+  console.log('oi');
 
   const [userData, setUserData] = useState({
     name: user?.name,
@@ -57,7 +64,7 @@ export default function Eu() {
       });
 
       if (response.status === 200) {
-        alert('Conta editada com sucesso!');
+        toast.success('Conta editada com sucesso!');
 
         router.refresh();
         router.push('/painel-de-controle');
@@ -66,7 +73,7 @@ export default function Eu() {
     } catch (error: any) {
       console.log(error);
       setIsLoading(false);
-      alert(error.response.data.details);
+      toast.error(error.response.data.details);
     } finally {
       setIsLoading(false);
     }
@@ -80,7 +87,7 @@ export default function Eu() {
     const { newPassword, confirmNewPassword } = userData;
 
     if (newPassword !== confirmNewPassword) {
-      alert('As senhas não coincidem');
+      toast.error('As senhas não coincidem');
       return;
     }
 
@@ -91,7 +98,7 @@ export default function Eu() {
       });
 
       if (response.status === 200) {
-        alert('Senha editada com sucesso!');
+        toast.success('Senha editada com sucesso!');
 
         router.push('/painel-de-controle');
         setIsLoading(false);
@@ -99,7 +106,7 @@ export default function Eu() {
     } catch (error: any) {
       console.log(error);
       setIsLoading(false);
-      alert(error.response.data.details);
+      toast.error(error.response.data.details);
     } finally {
       setIsLoading(false);
     }

@@ -19,6 +19,10 @@ export type User = {
   email: string;
   cpf: string;
   ongs: Ong[];
+  admin: boolean;
+  birthDate?: Date;
+  ongEmployeeId?: number;
+  sex?: string;
 };
 
 export type Vacancy = {

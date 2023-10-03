@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 
 import { Header } from '@/components/header';
 import { AuthProvider } from '@/contexts/auth-context';
+import { Toaster } from 'react-hot-toast';
 
 export const metadata: Metadata = {
   title: 'Faça a diferença no mundo | sONGs ',
@@ -19,6 +20,7 @@ export default function RootLayout({
       <body className='bg-neutral-50 text-neutral-800'>
         <AuthProvider>
           <Header />
+          <Toaster />
           {children}
         </AuthProvider>
       </body>

@@ -13,6 +13,8 @@ export default function PainelDeControle() {
     redirect('/entrar');
   }
 
+  console.log('oi');
+
   return (
     <div className='container mx-auto'>
       <main className='flex'>

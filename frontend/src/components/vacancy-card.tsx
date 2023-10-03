@@ -10,7 +10,9 @@ export function VacancyCard({ vacancy }: { vacancy: Vacancy }) {
           : vacancy.title}
       </h3>
       <p className='text-lg mb-4' title={vacancy.description}>
-        {vacancy.description.substring(0, 80).concat('...') || '⠀'}
+        {vacancy.description.length >= 80
+          ? vacancy.description.substring(0, 80).concat('...') || '⠀'
+          : vacancy.description}
       </p>
 
       <Link

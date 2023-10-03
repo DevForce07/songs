@@ -54,6 +54,10 @@ export function AuthProvider({ children }: any) {
     });
     setUser(null);
     setIsAuthenticaded(false);
+    setIsAuthLoading(false);
+
+    console.log('SAAAAAAAAAAAIIIIIIRRRRR');
+
     redirect('/');
   }, []);
 
@@ -74,11 +78,13 @@ export function AuthProvider({ children }: any) {
         })
         .catch((error) => {
           console.log(error);
+          setIsAuthLoading(false);
 
           signOut();
         });
     } else {
       setIsAuthenticaded(false);
+      setIsAuthLoading(false);
     }
   }, [user]);
 
