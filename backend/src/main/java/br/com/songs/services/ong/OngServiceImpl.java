@@ -106,7 +106,7 @@ public class OngServiceImpl implements OngService {
 
         Perfil perfilLogged = userLoggedService.getUserLogged().get();
 
-        if(!perfilLogged.getOngs().stream().map(Ong::getId).anyMatch(id -> Long.compare(id, requestGetDTO.getId()) == 0)){
+        if(perfilLogged.getOngs() != null &&!perfilLogged.getOngs().stream().map(Ong::getId).anyMatch(id -> Long.compare(id, requestGetDTO.getId()) == 0)){
             throw new OperationException("operation not permitted");
         }
 
@@ -133,7 +133,7 @@ public class OngServiceImpl implements OngService {
         Optional<Perfil> userLogged = userLoggedService.getUserLogged();
         OngRequestGetDTO requestGetDTO = findById(id);
 
-        if(!userLogged.get().getOngs().stream().map(Ong::getId).anyMatch(idOng -> Long.compare(idOng, id) == 0)){
+        if(userLogged.get().getOngs() != null && !userLogged.get().getOngs().stream().map(Ong::getId).anyMatch(idOng -> Long.compare(idOng, id) == 0)){
             throw new OperationException("operation not permitted");
         }
 
