@@ -10,10 +10,13 @@ import br.com.songs.exception.UserNotFoundException;
 import br.com.songs.repository.UserPerfilRepository;
 import br.com.songs.services.audit.LogSystemService;
 import br.com.songs.services.ong.OngService;
+import br.com.songs.services.user.login.AuthenticateAndManagerTokenService;
 import br.com.songs.services.user.login.UserLoggedService;
+import br.com.songs.web.dto.perfil.employee.EmployeeJwtToken;
 import br.com.songs.web.dto.perfil.employee.EmployeeRequestGetDTO;
 import br.com.songs.web.dto.perfil.employee.EmployeeRequestPostDTO;
 import br.com.songs.web.dto.perfil.employee.EmployeeRequestPutDTO;
+import br.com.songs.web.dto.security.TokenJwtDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +43,8 @@ public class EmployeePerfilServiceImpl implements EmployeePerfilService{
     private OngService ongService;
     @Autowired
     private LogSystemService logSystemService;
+    @Autowired
+    private AuthenticateAndManagerTokenService authenticateService;
     @Override
     public void updateUserCurrent(EmployeeRequestPutDTO userDTO) {
         EmployeePerfil employeePerfil = convertEmployeeRequestPutDTOToEmployeeEntity(userDTO);
@@ -133,5 +138,15 @@ public class EmployeePerfilServiceImpl implements EmployeePerfilService{
         if(userLogged.isPresent() && userLogged.get().getDecriminatorValue().isAdmin()){
             userRepository.deleteById(id);
         }
+    }
+
+    @Override
+    public EmployeeJwtToken login(String email, String password) {
+        TokenJwtDTO authenticateAndGenerateToken = authenticateService.authenticateAndGenerateToken(email,
+                password);
+        long id = authenticateAndGenerateToken.getUserDTO().getId();
+        EmployeeRequestGetDTO employeeRequestGetDTO = findById(id);
+
+        return EmployeeJwtToken.builder().token(authenticateAndGenerateToken.getToken()).expire(authenticateAndGenerateToken.getExpire()).userDTO(employeeRequestGetDTO).build();
     }
 }
