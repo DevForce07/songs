@@ -1,5 +1,6 @@
 package br.com.songs.converter.users;
 
+import br.com.songs.converter.ong.OngConverter;
 import br.com.songs.domain.entity.*;
 import br.com.songs.exception.OperationException;
 import br.com.songs.exception.UserNotFoundException;
@@ -49,7 +50,12 @@ public class PerfilConverter {
     }
 
     public static AdminOngRequestGetDTO adminOngEntityToConvertUserOngRequestGetDTO(AdminOngPerfil user){
-        return AdminOngRequestGetDTO.builder().id(user.getId()).email(user.getEmail()).name(user.getName()).cpf(user.getDocument()).isAdmin(user.getDecriminatorValue().isAdmin()).build();
+        List<OngRequestGetDTO> ongRequestGetDTOS = null;
+        if(user.getOngs()!=null){
+
+            ongRequestGetDTOS = user.getOngs().stream().map(OngConverter::convertOngEntityToOngRequestGetDTO).collect(Collectors.toList());
+        }
+        return AdminOngRequestGetDTO.builder().id(user.getId()).email(user.getEmail()).name(user.getName()).cpf(user.getDocument()).ongs(ongRequestGetDTOS).isAdmin(user.getDecriminatorValue().isAdmin()).build();
     }
     public static AdminOngPerfil convertUserOngRequestPostDTOToAdminOngEntity(AdminOngRequestPostDTO userDTO){
         return AdminOngPerfil.builder().email(userDTO.getEmail()).name(userDTO.getName()).document(userDTO.getCpf()).password(userDTO.getPassword()).build();

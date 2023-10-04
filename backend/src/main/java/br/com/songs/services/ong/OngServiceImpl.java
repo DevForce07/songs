@@ -102,7 +102,14 @@ public class OngServiceImpl implements OngService {
 
     @Override
     public void updateOng(OngRequestPutDTO ongRequestPutDTO) {
-        findById(ongRequestPutDTO.getId());
+        OngRequestGetDTO requestGetDTO = findById(ongRequestPutDTO.getId());
+
+        Perfil perfilLogged = userLoggedService.getUserLogged().get();
+
+        if(!perfilLogged.getOngs().stream().map(Ong::getId).anyMatch(id -> Long.compare(id, requestGetDTO.getId()) == 0)){
+            throw new OperationException("operation not permitted");
+        }
+
         Ong ong = convertOngRequestPutDTOToOngEntity(ongRequestPutDTO);
 
         checkFieldsFromOng(ong);
@@ -124,12 +131,15 @@ public class OngServiceImpl implements OngService {
     @Override
     public void deleteOngById(long id) {
         Optional<Perfil> userLogged = userLoggedService.getUserLogged();
+        OngRequestGetDTO requestGetDTO = findById(id);
+
+        if(!userLogged.get().getOngs().stream().map(Ong::getId).anyMatch(idOng -> Long.compare(idOng, id) == 0)){
+            throw new OperationException("operation not permitted");
+        }
 
         if(userLogged.isEmpty() || !userLogged.get().getDecriminatorValue().isAdmin()){
             throw new UserNotFoundException("User admin not found");
         }
-
-        OngRequestGetDTO requestGetDTO = findById(id);
         repository.deleteById(requestGetDTO.getId());
     }
 

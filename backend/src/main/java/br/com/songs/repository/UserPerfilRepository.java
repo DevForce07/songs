@@ -3,6 +3,7 @@ package br.com.songs.repository;
 import java.util.List;
 import java.util.Optional;
 
+import br.com.songs.domain.entity.AdminOngPerfil;
 import br.com.songs.domain.entity.EmployeePerfil;
 import br.com.songs.domain.entity.Perfil;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -23,5 +24,8 @@ public interface UserPerfilRepository extends JpaRepository<Perfil, Long> {
 
 	@Query(value = "SELECT p FROM EmployeePerfil p WHERE p.id = :id")
 	EmployeePerfil findByIdEmplloyee(@Param("id") long id);
+
+	@Query(value = "SELECT a FROM AdminOngPerfil a WHERE a.id = :id")
+	AdminOngPerfil findByIdAdmin(@Param("id") long id);
 
 }

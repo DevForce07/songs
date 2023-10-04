@@ -38,7 +38,7 @@ public class OngConverter {
     public static OngRequestGetDTO convertOngEntityToOngRequestGetDTO(Ong ong){
         return OngRequestGetDTO.builder().id(ong.getId()).name(ong.getName())
                 .cnpj(ong.getCnpj()).email(ong.getEmail()).address(ong.getAddress()).description(ong.getDescription()).urlImage(ong.getUrlImage()).phoneNumber(ong.getPhoneNumber())
-                .actingArea(null).build();
+                .actingArea(convertActingAreaEntityToActingAreaDTO(ong.getActingArea())).build();
     }
 
     public static Ong convertOngRequestPostDTOToOngEntity(OngRequestPostDTO ong){
