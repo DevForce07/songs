@@ -13,8 +13,6 @@ export default function PainelDeControle() {
     redirect('/entrar');
   }
 
-  console.log('oi');
-
   return (
     <div className='container mx-auto'>
       <main className='flex'>
@@ -27,19 +25,11 @@ export default function PainelDeControle() {
           <div className='flex flex-col w-full max-w-md px-4 gap-4'>
             <Link
               className='flex items-center justify-center gap-2 border border-cyan-700 p-4 w-full rounded text-cyan-700 font-bold hover:bg-cyan-800 hover:text-neutral-100 transition-colors'
-              href='/ongs'
+              href={user?.admin ? '/ongs' : `/ongs/${user?.ongEmployeeId}`}
             >
               <Building className='w-6 h-6' />
-              Gerenciar ONGs
+              Gerenciar ONG{user?.admin ? 's' : ''}
             </Link>
-
-            {/* <Link
-              className='flex items-center justify-center gap-2 border border-cyan-700 p-4 w-full rounded text-cyan-700 font-bold hover:bg-cyan-800 hover:text-neutral-100 transition-colors'
-              href='/usuarios'
-            >
-              <User className='w-6 h-6' />
-              Gerenciar Usuários
-            </Link> */}
 
             <Link
               className='flex items-center justify-center gap-2 border border-cyan-700 p-4 w-full rounded text-cyan-700 font-bold hover:bg-cyan-800 hover:text-neutral-100 transition-colors'

@@ -14,7 +14,7 @@ export type Ong = {
 };
 
 export type User = {
-  id: string;
+  id: number;
   name: string;
   email: string;
   cpf: string;

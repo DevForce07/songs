@@ -43,7 +43,8 @@ export function AuthProvider({ children }: any) {
 
     api.defaults.headers['Authorization'] = `Bearer ${data.token}`;
 
-    setUser(data.userDTO);
+    // setUser(data.userDTO);
+    getUser();
     setIsAuthenticaded(true);
     return data;
   }
@@ -56,12 +57,10 @@ export function AuthProvider({ children }: any) {
     setIsAuthenticaded(false);
     setIsAuthLoading(false);
 
-    console.log('SAAAAAAAAAAAIIIIIIRRRRR');
-
     redirect('/');
   }, []);
 
-  useEffect(() => {
+  function getUser() {
     const { 'songs.token': token } = parseCookies();
 
     api.defaults.headers['Authorization'] = `Bearer ${token}`;
@@ -73,6 +72,25 @@ export function AuthProvider({ children }: any) {
           const user = response.data;
 
           setUser(user);
+
+          if (user?.admin === false) {
+            api
+              .get(`/employees/findById/${user.id}`)
+              .then((response) => {
+                const user = response.data;
+
+                setUser(user);
+                setIsAuthenticaded(true);
+                setIsAuthLoading(false);
+              })
+              .catch((error) => {
+                console.log(error);
+                setIsAuthLoading(false);
+
+                signOut();
+              });
+          }
+
           setIsAuthenticaded(true);
           setIsAuthLoading(false);
         })
@@ -86,6 +104,10 @@ export function AuthProvider({ children }: any) {
       setIsAuthenticaded(false);
       setIsAuthLoading(false);
     }
+  }
+
+  useEffect(() => {
+    getUser();
   }, [user]);
 
   return (

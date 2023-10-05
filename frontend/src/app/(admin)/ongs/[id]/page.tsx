@@ -15,7 +15,7 @@ export default function OngProfileAdmin() {
   const [vacancies, setVacancies] = useState<Vacancy[] | null>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  const { isAuthLoading, isAuthenticaded } = useContext(AuthContext);
+  const { isAuthLoading, isAuthenticaded, user } = useContext(AuthContext);
 
   const router = useRouter();
 
@@ -71,13 +71,15 @@ export default function OngProfileAdmin() {
       ) : (
         <main className='max-w-4xl w-full mx-auto px-4'>
           <div className='flex flex-col w-full  px-4 pt-10 gap-4'>
-            <Link
-              className='flex items-center justify-center gap-2 border border-cyan-700 p-4 w-full rounded text-cyan-700 font-bold hover:bg-cyan-800 hover:text-neutral-100 transition-colors'
-              href={`/ongs/${id}/funcionarios`}
-            >
-              <Eye className='w-6 h-6' />
-              Visualziar funcionários
-            </Link>
+            {user?.admin && (
+              <Link
+                className='flex items-center justify-center gap-2 border border-cyan-700 p-4 w-full rounded text-cyan-700 font-bold hover:bg-cyan-800 hover:text-neutral-100 transition-colors'
+                href={`/ongs/${id}/funcionarios`}
+              >
+                <Eye className='w-6 h-6' />
+                Visualziar funcionários
+              </Link>
+            )}
 
             <Link
               className='flex items-center justify-center gap-2 border border-cyan-700 p-4 w-full rounded text-cyan-700 font-bold hover:bg-cyan-800 hover:text-neutral-100 transition-colors'

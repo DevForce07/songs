@@ -48,14 +48,14 @@ export default function Funcionarios() {
     }
   }
 
-  // async function handleDeleteVacancy(id: number) {
-  //   const response = await api.delete(`/vacancies/deleteById/${id}`);
+  async function handleDeleteEmployee(id: number) {
+    const response = await api.delete(`/employees/delete/byId/${id}`);
 
-  //   if (response.status === 200) {
-  //     toast.success('Vaga deletada com sucesso!');
-  //     router.refresh();
-  //   }
-  // }
+    if (response.status === 200) {
+      toast.success('Funcionário deletado com sucesso!');
+      router.refresh();
+    }
+  }
 
   useEffect(() => {
     getOng();
@@ -141,11 +141,11 @@ export default function Funcionarios() {
                       </Link>
 
                       <button
-                        // onClick={() =>
-                        //   confirm(
-                        //     'Tem certeza que deseja deletar essa vaga?'
-                        //   ) && handleDeleteVacancy(employee.id)
-                        // }
+                        onClick={() =>
+                          confirm(
+                            'Tem certeza que deseja deletar esse funcionário?'
+                          ) && handleDeleteEmployee(employee.id)
+                        }
                         className='p-4 py-2 bg-red-600 font-bold rounded text-neutral-50 flex items-center justify-center lg:justify-start gap-2 hover:bg-red-700 transition-colors'
                       >
                         <Trash className='w-4 h-4' />
