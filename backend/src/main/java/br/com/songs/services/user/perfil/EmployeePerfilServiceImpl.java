@@ -16,6 +16,7 @@ import br.com.songs.web.dto.perfil.employee.EmployeeJwtToken;
 import br.com.songs.web.dto.perfil.employee.EmployeeRequestGetDTO;
 import br.com.songs.web.dto.perfil.employee.EmployeeRequestPostDTO;
 import br.com.songs.web.dto.perfil.employee.EmployeeRequestPutDTO;
+import br.com.songs.web.dto.perfil.generic.PerfilOngRequestGetDTO;
 import br.com.songs.web.dto.security.TokenJwtDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -48,9 +49,17 @@ public class EmployeePerfilServiceImpl implements EmployeePerfilService{
     @Override
     public void updateUserCurrent(EmployeeRequestPutDTO userDTO) {
         EmployeePerfil employeePerfil = convertEmployeeRequestPutDTOToEmployeeEntity(userDTO);
+        PerfilOngRequestGetDTO perfilLogged = userLoggedService.getPerfilLogged();
 
-        if (employeePerfil.getId() == 0){
+        if (employeePerfil.getId() == 0 || perfilLogged.getId() != employeePerfil.getId() ){
             throw new UserNotFoundException("ID not found");
+        }
+
+
+        EmployeePerfil emplloyeeOld = userRepository.findByIdEmplloyee(employeePerfil.getId());
+
+        if (emplloyeeOld == null){
+            throw new UserNotFoundException("ID user not found");
         }
 
         checkoutIfExistsOng(employeePerfil);
@@ -58,7 +67,7 @@ public class EmployeePerfilServiceImpl implements EmployeePerfilService{
         List<Ong> ongs = ongService.findIn(userDTO.getOngs());
         checkFieldsFromUser(employeePerfil, false);
         employeePerfil.setOngs(ongs);
-        employeePerfil.setPassword(passwordEncoder.encode(employeePerfil.getPassword()));
+        employeePerfil.setPassword(emplloyeeOld.getPassword());
         userRepository.save(employeePerfil);
         logSystemService.createLog(LogSystem.UPDATE_EMPLOYEES,employeePerfil.getOngEmployeeId(), userLoggedService.getUserLogged().get().getId(), "update empĺoyee");
 
