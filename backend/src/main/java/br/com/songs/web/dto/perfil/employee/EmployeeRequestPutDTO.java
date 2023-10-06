@@ -20,8 +20,6 @@ public class EmployeeRequestPutDTO {
 
 	private String email;
 
-	private String password;
-
 	private String cpf;
 
 	private LocalDate birthDate;
