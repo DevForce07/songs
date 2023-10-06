@@ -15,7 +15,8 @@ type AuthContextType = {
   isAuthenticaded: boolean;
   user: User | null;
   setUser: (user: User) => void;
-  signIn: (credentials: SignInCredentials) => Promise<void>;
+  employeeSignIn: (credentials: SignInCredentials) => Promise<void>;
+  adminSignIn: (credentials: SignInCredentials) => Promise<void>;
   signOut: () => void;
   isAuthLoading: boolean;
 };
@@ -31,8 +32,27 @@ export function AuthProvider({ children }: any) {
 
   // const isAuthenticaded = !!user;
 
-  async function signIn({ email, password }: SignInCredentials) {
-    const { data } = await api.post('/login', {
+  async function employeeSignIn({ email, password }: SignInCredentials) {
+    const { data } = await api.post('/employees/login', {
+      email,
+      password,
+    });
+
+    setCookie(undefined, 'songs.token', data.token, {
+      maxAge: 60 * 60 * 3, // 3 hours
+    });
+
+    api.defaults.headers['Authorization'] = `Bearer ${data.token}`;
+
+    // setUser(data.userDTO);
+
+    getUser();
+    setIsAuthenticaded(true);
+    return data;
+  }
+
+  async function adminSignIn({ email, password }: SignInCredentials) {
+    const { data } = await api.post('/admins/login', {
       email,
       password,
     });
@@ -49,23 +69,25 @@ export function AuthProvider({ children }: any) {
     return data;
   }
 
-  const signOut = useCallback(() => {
+  function signOut() {
     setCookie(undefined, 'songs.token', '', {
       maxAge: -1,
     });
+
     setUser(null);
-    setIsAuthenticaded(false);
+
     setIsAuthLoading(false);
 
+    setIsAuthenticaded(false);
+    console.log('signOut isAuthenticaded', isAuthenticaded);
     redirect('/');
-  }, []);
+  }
 
   function getUser() {
     const { 'songs.token': token } = parseCookies();
 
-    api.defaults.headers['Authorization'] = `Bearer ${token}`;
-
     if (token) {
+      api.defaults.headers['Authorization'] = `Bearer ${token}`;
       api
         .get('/current')
         .then((response) => {
@@ -73,13 +95,14 @@ export function AuthProvider({ children }: any) {
 
           setUser(user);
 
-          if (user?.admin === false) {
+          if (!user?.admin) {
             api
-              .get(`/employees/findById/${user.id}`)
+              .get('/employees/current')
               .then((response) => {
                 const user = response.data;
 
                 setUser(user);
+
                 setIsAuthenticaded(true);
                 setIsAuthLoading(false);
               })
@@ -108,7 +131,7 @@ export function AuthProvider({ children }: any) {
 
   useEffect(() => {
     getUser();
-  }, [user]);
+  }, [isAuthenticaded]);
 
   return (
     <AuthContext.Provider
@@ -116,7 +139,8 @@ export function AuthProvider({ children }: any) {
         user,
         setUser,
         isAuthenticaded,
-        signIn,
+        employeeSignIn,
+        adminSignIn,
         signOut,
         isAuthLoading,
       }}

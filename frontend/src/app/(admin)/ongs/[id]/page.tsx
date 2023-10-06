@@ -53,14 +53,14 @@ export default function OngProfileAdmin() {
 
     if (response.status === 200) {
       toast.success('Vaga deletada com sucesso!');
-      router.refresh();
+      window.location.reload();
     }
   }
 
   useEffect(() => {
     getOng();
     getVacanciesByOng();
-  }, [ong]);
+  }, []);
 
   return (
     <>
@@ -124,7 +124,10 @@ export default function OngProfileAdmin() {
             ) : vacancies && vacancies.length > 0 ? (
               <div className='grid grid-cols-1 md:grid-cols-2  gap-4'>
                 {vacancies.map((vacancy) => (
-                  <div className='rounded-lg p-4 border border-neutral-300'>
+                  <div
+                    className='rounded-lg p-4 border border-neutral-300'
+                    key={vacancy.id}
+                  >
                     <h3
                       className='text-xl font-bold mb-2'
                       title={vacancy.title}
