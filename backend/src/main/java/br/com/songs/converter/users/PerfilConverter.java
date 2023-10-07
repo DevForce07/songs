@@ -73,7 +73,7 @@ public class PerfilConverter {
     }
 
     public static EmployeePerfil convertEmployeeRequestPutDTOToEmployeeEntity(EmployeeRequestPutDTO userDTO){
-        return EmployeePerfil.builder().id(userDTO.getId()).email(userDTO.getEmail()).name(userDTO.getName()).document(userDTO.getCpf()).password(userDTO.getPassword()).birthDate(userDTO.getBirthDate()).ongEmployeeId(userDTO.getOngEmployeeId()).sex(userDTO.getSex()).build();
+        return EmployeePerfil.builder().id(userDTO.getId()).email(userDTO.getEmail()).name(userDTO.getName()).document(userDTO.getCpf()).birthDate(userDTO.getBirthDate()).ongEmployeeId(userDTO.getOngEmployeeId()).sex(userDTO.getSex()).build();
     }
 
     public static Perfil extratUserOrThrowException(Optional<Perfil> userCurrent) {
