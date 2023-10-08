@@ -8,6 +8,7 @@ import br.com.songs.web.dto.perfil.employee.EmployeeJwtToken;
 import br.com.songs.web.dto.perfil.employee.EmployeeRequestGetDTO;
 import br.com.songs.web.dto.perfil.employee.EmployeeRequestPostDTO;
 import br.com.songs.web.dto.perfil.employee.EmployeeRequestPutDTO;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -29,4 +30,6 @@ public interface EmployeePerfilService {
 
 
 	EmployeeJwtToken login(String email, String password);
+
+	void saveImagePerfil(String fileName, MultipartFile multipartFile);
 }

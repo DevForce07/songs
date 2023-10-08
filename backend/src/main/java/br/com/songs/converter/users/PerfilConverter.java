@@ -55,25 +55,25 @@ public class PerfilConverter {
 
             ongRequestGetDTOS = user.getOngs().stream().map(OngConverter::convertOngEntityToOngRequestGetDTO).collect(Collectors.toList());
         }
-        return AdminOngRequestGetDTO.builder().id(user.getId()).email(user.getEmail()).name(user.getName()).cpf(user.getDocument()).ongs(ongRequestGetDTOS).isAdmin(user.getDecriminatorValue().isAdmin()).build();
+        return AdminOngRequestGetDTO.builder().id(user.getId()).email(user.getEmail()).name(user.getName()).cpf(user.getDocument()).ongs(ongRequestGetDTOS).isAdmin(user.getDecriminatorValue().isAdmin()).imageURL(user.getImageURL()).build();
     }
     public static AdminOngPerfil convertUserOngRequestPostDTOToAdminOngEntity(AdminOngRequestPostDTO userDTO){
-        return AdminOngPerfil.builder().email(userDTO.getEmail()).name(userDTO.getName()).document(userDTO.getCpf()).password(userDTO.getPassword()).build();
+        return AdminOngPerfil.builder().email(userDTO.getEmail()).name(userDTO.getName()).document(userDTO.getCpf()).password(userDTO.getPassword()).imageURL(userDTO.getImageURL()).build();
     }
 
     public static AdminOngPerfil convertUserOngRequestPutDTOToAdminOngEntity(AdminOngRequestPutDTO userDTO){
-        return AdminOngPerfil.builder().id(userDTO.getId()).email(userDTO.getEmail()).name(userDTO.getName()).document(userDTO.getCpf()).build();
+        return AdminOngPerfil.builder().id(userDTO.getId()).email(userDTO.getEmail()).name(userDTO.getName()).document(userDTO.getCpf()).imageURL(userDTO.getImageURL()).build();
     }
 
     public static EmployeeRequestGetDTO employeeEntityToConvertEmployeeRequestGetDTO(EmployeePerfil user){
-        return EmployeeRequestGetDTO.builder().id(user.getId()).email(user.getEmail()).name(user.getName()).cpf(user.getDocument()).birthDate(user.getBirthDate()).ongEmployeeId(user.getOngEmployeeId()).sex(user.getSex()).isAdmin(user.getDecriminatorValue().isAdmin()) .build();
+        return EmployeeRequestGetDTO.builder().id(user.getId()).email(user.getEmail()).name(user.getName()).cpf(user.getDocument()).birthDate(user.getBirthDate()).ongEmployeeId(user.getOngEmployeeId()).sex(user.getSex()).isAdmin(user.getDecriminatorValue().isAdmin()).imageURL(user.getImageURL()).build();
     }
     public static EmployeePerfil convertEmployeeRequestPostDTOToEmployeeEntity(EmployeeRequestPostDTO userDTO){
-        return EmployeePerfil.builder().email(userDTO.getEmail()).name(userDTO.getName()).document(userDTO.getCpf()).password(userDTO.getPassword()).birthDate(userDTO.getBirthDate()).ongEmployeeId(userDTO.getOngEmployeeId()).sex(userDTO.getSex()) .build();
+        return EmployeePerfil.builder().email(userDTO.getEmail()).name(userDTO.getName()).document(userDTO.getCpf()).password(userDTO.getPassword()).birthDate(userDTO.getBirthDate()).ongEmployeeId(userDTO.getOngEmployeeId()).sex(userDTO.getSex()).imageURL(userDTO.getImageURL()) .build();
     }
 
     public static EmployeePerfil convertEmployeeRequestPutDTOToEmployeeEntity(EmployeeRequestPutDTO userDTO){
-        return EmployeePerfil.builder().id(userDTO.getId()).email(userDTO.getEmail()).name(userDTO.getName()).document(userDTO.getCpf()).birthDate(userDTO.getBirthDate()).ongEmployeeId(userDTO.getOngEmployeeId()).sex(userDTO.getSex()).build();
+        return EmployeePerfil.builder().id(userDTO.getId()).email(userDTO.getEmail()).name(userDTO.getName()).document(userDTO.getCpf()).birthDate(userDTO.getBirthDate()).ongEmployeeId(userDTO.getOngEmployeeId()).sex(userDTO.getSex()).imageURL(userDTO.getImageURL()) .build();
     }
 
     public static Perfil extratUserOrThrowException(Optional<Perfil> userCurrent) {
