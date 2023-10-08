@@ -67,7 +67,7 @@ public class AdminOngPerfilController {
 	}
 
 	@SecurityRequirement(name = "Bearer Authentication")
-	@PostMapping("/uploadFile")
+	@PatchMapping("/uploadFile")
 	public ResponseEntity<?> uploadFile(
 			@RequestParam("file") MultipartFile multipartFile)
 			throws IOException {
