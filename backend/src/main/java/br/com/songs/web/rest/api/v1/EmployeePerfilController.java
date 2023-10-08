@@ -20,7 +20,11 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @RestController
 @CrossOrigin
@@ -90,6 +94,19 @@ public class EmployeePerfilController {
 		return ResponseEntity.ok().build();
 	}
 
+	@SecurityRequirement(name = "Bearer Authentication")
+	@PostMapping("/uploadFile")
+	public ResponseEntity<?> uploadFile(
+			@RequestParam("file") MultipartFile multipartFile)
+			throws IOException {
+
+		String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+
+		userService.saveImagePerfil(fileName, multipartFile);
+
+
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
 
 	public record Password(String password){}
 }
