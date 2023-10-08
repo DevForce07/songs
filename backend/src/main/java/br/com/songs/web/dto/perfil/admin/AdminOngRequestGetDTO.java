@@ -23,5 +23,7 @@ public class AdminOngRequestGetDTO {
 
 	private List<OngRequestGetDTO> ongs;
 
+	private String imageURL;
+
 	private boolean isAdmin;
 }

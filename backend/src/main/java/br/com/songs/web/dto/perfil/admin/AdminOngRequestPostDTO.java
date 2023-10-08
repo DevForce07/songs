@@ -18,4 +18,7 @@ public class AdminOngRequestPostDTO {
 	private String password;
 
 	private String cpf;
+
+
+	private String imageURL;
 }

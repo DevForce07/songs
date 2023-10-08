@@ -4,6 +4,7 @@ import br.com.songs.web.dto.perfil.admin.AdminJwtToken;
 import br.com.songs.web.dto.perfil.admin.AdminOngRequestGetDTO;
 import br.com.songs.web.dto.perfil.admin.AdminOngRequestPostDTO;
 import br.com.songs.web.dto.perfil.admin.AdminOngRequestPutDTO;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface AdminOngPerfilService {
 
@@ -18,5 +19,7 @@ public interface AdminOngPerfilService {
 	void deleteUserCurrent();
 
 	AdminJwtToken login(String email, String password);
+
+	void saveImagePerfil(String fileName, MultipartFile multipartFile);
 
 }

@@ -26,4 +26,6 @@ public class EmployeeRequestPostDTO {
 	private long ongEmployeeId;
 
 	private char sex;
+
+	private String imageURL;
 }
