@@ -10,6 +10,7 @@ import br.com.songs.exception.UserNotFoundException;
 import br.com.songs.repository.ActingAreaRepository;
 import br.com.songs.repository.OngRepository;
 import br.com.songs.services.audit.LogSystemService;
+import br.com.songs.services.file.FileUploadServiceImpl;
 import br.com.songs.services.user.login.UserLoggedService;
 import br.com.songs.web.dto.acting.ActingAreaDTO;
 import br.com.songs.web.dto.ong.OngRequestGetDTO;
@@ -20,7 +21,9 @@ import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -40,6 +43,9 @@ public class OngServiceImpl implements OngService {
     private ActingAreaRepository actingAreaRepository;
     @Autowired
     private LogSystemService logSystemService;
+    @Autowired
+    private FileUploadServiceImpl fileUpload;
+
     @Override
     public OngRequestGetDTO findById(long id) {
         OngRequestGetDTO ongRequestGetDTO = convertOngEntity(findOngEntityById(id));
@@ -98,6 +104,35 @@ public class OngServiceImpl implements OngService {
         logSystemService.createLog(LogSystem.CREATE_ONG,ong.getId(), userLoggedService.getUserLogged().get().getId(), "criando uma nova ong");
 
         return convertOngEntity(saved);
+    }
+
+    @Override
+    public void saveImageOng(long idOng, String fileName, MultipartFile multipartFile) {
+
+        Optional<Perfil> userLogged = userLoggedService.getUserLogged();
+
+        if(userLogged.isEmpty() || !userLogged.get().getDecriminatorValue().isAdmin()){
+            throw new UserNotFoundException("User admin not found");
+        }
+
+        Optional<Ong> ongOptional = repository.findById(idOng);
+
+        if(ongOptional.isEmpty()){
+            throw  new OperationException("ong not found");
+        }
+
+        Ong ong = ongOptional.get();
+
+        String newImageURL = ong.getUrlImage();
+        try {
+            newImageURL = fileUpload.saveFile(fileName, multipartFile);
+        } catch (IOException e) {
+            throw new OperationException(e);
+        }
+
+        ong.setUrlImage(newImageURL);
+
+        repository.save(ong);
     }
 
     @Override
