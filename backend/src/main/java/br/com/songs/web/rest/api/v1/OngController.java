@@ -20,7 +20,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @RestController
 @CrossOrigin
@@ -72,5 +76,18 @@ public class OngController {
 	public ResponseEntity<?> delete(@PathVariable("id") long id) {
 		ongService.deleteOngById(id);
 		return ResponseEntity.ok().build();
+	}
+
+	@SecurityRequirement(name = "Bearer Authentication")
+	@PatchMapping("/uploadFile/{id}")
+	public ResponseEntity<?> uploadFile(@PathVariable("id") long id,
+			@RequestParam("file") MultipartFile multipartFile)
+			throws IOException {
+
+		String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+		ongService.saveImageOng(id, fileName, multipartFile);
+
+
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 }
