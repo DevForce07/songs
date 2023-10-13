@@ -31,4 +31,6 @@ public class EmployeeRequestGetDTO {
 	private char sex;
 
 	private boolean isAdmin;
+
+	private String imageURL;
 }

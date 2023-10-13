@@ -37,6 +37,10 @@ public class Perfil implements Serializable {
     private String document;
 
 
+    @Column(nullable = true, name = "image_url")
+    private String imageURL;
+
+
     @Transient
     public PerfilDecriminator getDecriminatorValue() {
         String value = this.getClass().getAnnotation(DiscriminatorValue.class).value();

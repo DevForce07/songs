@@ -22,4 +22,7 @@ public class AdminOngRequestPutDTO {
 	private String cpf;
 
 	private List<Long> ongs;
+
+
+	private String imageURL;
 }
