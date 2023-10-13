@@ -1,17 +1,25 @@
 'use client';
 
 import { api } from '@/lib/axios';
-import { Vacancy } from '@/types';
+import { Application, Vacancy } from '@/types';
+import axios from 'axios';
 import { Phone } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 
 import volunteerImg from 'public/voluntarios.jpg';
-import { useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 
 export default function Vaga() {
   const [vacancy, setVacancy] = useState<Vacancy | null>(null);
+  const [application, setApplication] = useState<Application>({
+    name: '',
+    email: '',
+    message: '',
+  });
+  const [isLoading, setIsLoading] = useState(false);
 
   const { id } = useParams();
 
@@ -28,6 +36,60 @@ export default function Vaga() {
   useEffect(() => {
     getVacancy();
   }, []);
+
+  async function handleApplicationSubmit(
+    event: React.FormEvent<HTMLFormElement>
+  ) {
+    event.preventDefault();
+
+    if (
+      application.name === '' ||
+      application.email === '' ||
+      application.message === ''
+    ) {
+      toast.error('Preencha todos os campos!');
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      const response = await axios.post(
+        `http://localhost:3000/api/vacancies/apply`,
+        {
+          application,
+          vacancy,
+        }
+      );
+
+      if (response.status === 200) {
+        setIsLoading(false);
+        toast.success('Candidatura enviada com sucesso!');
+        setApplication({
+          name: '',
+          email: '',
+          message: '',
+        });
+      } else {
+        toast.error('Erro ao enviar candidatura!');
+        setIsLoading(false);
+      }
+    } catch (error) {
+      console.log(error);
+      setIsLoading(false);
+    }
+  }
+
+  function handleInputChange(
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) {
+    const { id, value } = event.target;
+
+    setApplication({
+      ...application,
+      [id]: value,
+    });
+  }
 
   return (
     <main className='max-w-4xl w-full mx-auto px-4 flex flex-col gap-10'>
@@ -67,10 +129,14 @@ export default function Vaga() {
             <h2 className='text-xl font-bold text-cyan-700'>Endereço</h2>
             <p className='text-lg mt-2 mb-6'>{vacancy?.ong.address}</p>
 
-            <button className='p-4 bg-transparent border border-green-600 font-bold rounded text-green-700 flex items-center gap-2 hover:bg-green-600 hover:text-neutral-50 transition-colors justify-center w-full'>
+            <Link
+              href={`https://api.whatsapp.com/send/?phone=${vacancy?.ong.phoneNumber}&text=Olá, vim do sONGs!&type=phone_number&app_absent=0`}
+              target='_blank'
+              className='p-4 bg-transparent border border-green-600 font-bold rounded text-green-700 flex items-center gap-2 hover:bg-green-600 hover:text-neutral-50 transition-colors justify-center w-full'
+            >
               <Phone size={26} />
               Entre em contato
-            </button>
+            </Link>
           </div>
         </div>
       </div>
@@ -82,55 +148,61 @@ export default function Vaga() {
         </h2>
       </div>
 
-      {/* <div className='my-10'>
-        <h2 className='text-2xl font-bold text-cyan-700 mb-6'>
-          Vagas disponíveis
-        </h2>
+      <div className='mb-10'>
+        <h2 className='text-2xl font-bold text-cyan-700 mb-6'>Candidate-se</h2>
 
-        <div className='grid grid-cols-1 md:grid-cols-2  gap-4'>
-          <div className='rounded-lg p-4 border border-neutral-300'>
-            <h3 className='text-xl font-bold mb-2'>
-              Cuidador de animais asquerosos e peçonhentos
-            </h3>
-            <p className='text-lg mb-4'>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis
-              voluptatum, quibusdam...
-            </p>
+        <div className='w-full'>
+          <form
+            className='flex flex-col gap-8'
+            onSubmit={handleApplicationSubmit}
+          >
+            <div className='flex flex-col gap-8 md:flex-row'>
+              <label htmlFor='name' className='flex flex-col gap-2 w-full'>
+                Nome:
+                <input
+                  type='text'
+                  id='name'
+                  className='p-4 rounded border border-neutral-300 w-full bg-transparent'
+                  placeholder='************'
+                  value={application.name}
+                  onChange={handleInputChange}
+                />
+              </label>
 
-            <button className='p-4 py-2 bg-cyan-600 font-bold rounded text-neutral-50 flex items-center gap-2 hover:bg-cyan-700 transition-colors'>
-              Ver detalhes
+              <label htmlFor='email' className='flex flex-col gap-2 w-full'>
+                E-mail:
+                <input
+                  type='email'
+                  id='email'
+                  className='p-4 rounded border border-neutral-300 w-full bg-transparent'
+                  placeholder='fulano@email.com'
+                  value={application.email}
+                  onChange={handleInputChange}
+                />
+              </label>
+            </div>
+
+            <label htmlFor='message' className='flex flex-col gap-2 w-full'>
+              Mensagem:
+              <textarea
+                id='message'
+                className='p-4 rounded border border-neutral-300 w-full bg-transparent'
+                placeholder='Sua mensagem aqui...'
+                value={application.message}
+                onChange={handleInputChange}
+              ></textarea>
+            </label>
+
+            <button
+              disabled={isLoading}
+              type='submit'
+              className='bg-cyan-700 p-4 rounded text-neutral-50 font-bold hover:bg-cyan-800 transition-colors disabled:cursor-not-allowed disabled:bg-cyan-800/70 disabled:hover:bg-cyan-800/70'
+            >
+              Enviar
             </button>
-          </div>
-
-          <div className='rounded-lg p-4 border border-neutral-300'>
-            <h3 className='text-xl font-bold mb-2'>
-              Cuidador de animais asquerosos e peçonhentos
-            </h3>
-            <p className='text-lg mb-4'>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis
-              voluptatum, quibusdam...
-            </p>
-
-            <button className='p-4 py-2 bg-cyan-600 font-bold rounded text-neutral-50 flex items-center gap-2 hover:bg-cyan-700 transition-colors'>
-              Ver detalhes
-            </button>
-          </div>
-
-          <div className='rounded-lg p-4 border border-neutral-300'>
-            <h3 className='text-xl font-bold mb-2'>
-              Cuidador de animais asquerosos e peçonhentos
-            </h3>
-            <p className='text-lg mb-4'>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis
-              voluptatum, quibusdam...
-            </p>
-
-            <button className='p-4 py-2 bg-cyan-600 font-bold rounded text-neutral-50 flex items-center gap-2 hover:bg-cyan-700 transition-colors'>
-              Ver detalhes
-            </button>
-          </div>
+          </form>
         </div>
-      </div> */}
+      </div>
     </main>
   );
 }

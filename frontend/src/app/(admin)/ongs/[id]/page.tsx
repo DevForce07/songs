@@ -3,7 +3,7 @@
 import { AuthContext } from '@/contexts/auth-context';
 import { api } from '@/lib/axios';
 import { Ong, Vacancy } from '@/types';
-import { Eye, Frown, Pencil, Phone, Plus, Trash } from 'lucide-react';
+import { Eye, Frown, Lock, Pencil, Phone, Plus, Trash } from 'lucide-react';
 import Link from 'next/link';
 import { useParams, useRouter, redirect } from 'next/navigation';
 
@@ -71,16 +71,6 @@ export default function OngProfileAdmin() {
       ) : (
         <main className='max-w-4xl w-full mx-auto px-4'>
           <div className='flex flex-col w-full  px-4 pt-10 gap-4'>
-            {user?.admin && (
-              <Link
-                className='flex items-center justify-center gap-2 border border-cyan-700 p-4 w-full rounded text-cyan-700 font-bold hover:bg-cyan-800 hover:text-neutral-100 transition-colors'
-                href={`/ongs/${id}/funcionarios`}
-              >
-                <Eye className='w-6 h-6' />
-                Visualziar funcionários
-              </Link>
-            )}
-
             <Link
               className='flex items-center justify-center gap-2 border border-cyan-700 p-4 w-full rounded text-cyan-700 font-bold hover:bg-cyan-800 hover:text-neutral-100 transition-colors'
               href={`/ongs/${id}/criar-vaga`}
@@ -88,6 +78,25 @@ export default function OngProfileAdmin() {
               <Plus className='w-6 h-6' />
               Criar nova vaga
             </Link>
+
+            {user?.admin && (
+              <>
+                <Link
+                  className='flex items-center justify-center gap-2 border border-cyan-700 p-4 w-full rounded text-cyan-700 font-bold hover:bg-cyan-800 hover:text-neutral-100 transition-colors'
+                  href={`/ongs/${id}/funcionarios`}
+                >
+                  <Eye className='w-6 h-6' />
+                  Visualziar funcionários
+                </Link>
+                <Link
+                  className='flex items-center justify-center gap-2 border border-cyan-700 p-4 w-full rounded text-cyan-700 font-bold hover:bg-cyan-800 hover:text-neutral-100 transition-colors'
+                  href={`/ongs/${id}/auditoria`}
+                >
+                  <Lock className='w-6 h-6' />
+                  Registro de auditoria
+                </Link>
+              </>
+            )}
           </div>
 
           <div className='mt-10'>
@@ -104,10 +113,14 @@ export default function OngProfileAdmin() {
                 <h2 className='text-xl font-bold text-cyan-700'>Endereço</h2>
                 <p className='text-lg mt-2 mb-6'>{ong?.address}</p>
 
-                <button className='p-4 bg-transparent border border-green-600 font-bold rounded text-green-700 flex items-center gap-2 hover:bg-green-600 hover:text-neutral-50 transition-colors justify-center w-full'>
+                <Link
+                  href={`https://api.whatsapp.com/send/?phone=${ong?.phoneNumber}&text=Olá, vim do sONGs!&type=phone_number&app_absent=0`}
+                  target='_blank'
+                  className='p-4 bg-transparent border border-green-600 font-bold rounded text-green-700 flex items-center gap-2 hover:bg-green-600 hover:text-neutral-50 transition-colors justify-center w-full'
+                >
                   <Phone size={26} />
                   Entre em contato
-                </button>
+                </Link>
               </div>
             </div>
           </div>

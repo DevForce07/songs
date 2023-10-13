@@ -144,7 +144,7 @@ export default function Funcionarios() {
                           className='
                         font-bold texcya7'
                         >
-                          Nascimento:{''}
+                          Nascimento:{' '}
                         </span>
                         {new Date(employee.birthDate!).toLocaleDateString()}
                       </p>

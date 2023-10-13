@@ -131,7 +131,7 @@ export function AuthProvider({ children }: any) {
 
   useEffect(() => {
     getUser();
-  }, [isAuthenticaded]);
+  }, []);
 
   return (
     <AuthContext.Provider

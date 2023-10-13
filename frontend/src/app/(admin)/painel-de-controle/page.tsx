@@ -1,7 +1,7 @@
 'use client';
 
 import { AuthContext } from '@/contexts/auth-context';
-import { Building, Settings, User } from 'lucide-react';
+import { Building, Lock, Settings, User } from 'lucide-react';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { useContext } from 'react';
@@ -10,7 +10,7 @@ export default function PainelDeControle() {
   const { user, isAuthenticaded, isAuthLoading } = useContext(AuthContext);
 
   if (!isAuthLoading && !isAuthenticaded) {
-    redirect('/entrar');
+    redirect('/');
   }
 
   return (

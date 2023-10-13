@@ -34,3 +34,9 @@ export type Vacancy = {
   lastUpdate: Date;
   dateCreated: Date;
 };
+
+export type Application = {
+  name: string;
+  email: string;
+  message: string;
+};
