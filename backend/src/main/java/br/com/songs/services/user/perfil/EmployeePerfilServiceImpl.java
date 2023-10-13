@@ -74,7 +74,7 @@ public class EmployeePerfilServiceImpl implements EmployeePerfilService{
         employeePerfil.setOngs(ongs);
         employeePerfil.setPassword(emplloyeeOld.getPassword());
         userRepository.save(employeePerfil);
-        logSystemService.createLog(LogSystem.UPDATE_EMPLOYEES,employeePerfil.getOngEmployeeId(), userLoggedService.getUserLogged().get().getId(), "update employee");
+        logSystemService.createLog(LogSystem.UPDATE_EMPLOYEES,employeePerfil.getOngEmployeeId(), userLoggedService.getUserLogged().get().getId(), "update employee by "+employeePerfil.getName());
 
     }
 
@@ -85,7 +85,7 @@ public class EmployeePerfilServiceImpl implements EmployeePerfilService{
         checkFieldsFromUser(userLogged, false);
         userRepository.save(userLogged);
         EmployeeRequestGetDTO employeeRequestGetDTO = findById(userLogged.getId());
-        logSystemService.createLog(LogSystem.UPDATE_EMPLOYEES,employeeRequestGetDTO.getOngEmployeeId(), employeeRequestGetDTO.getId(), "update employee");
+        logSystemService.createLog(LogSystem.UPDATE_EMPLOYEES,employeeRequestGetDTO.getOngEmployeeId(), employeeRequestGetDTO.getId(), "update employee by "+employeeRequestGetDTO.getName());
     }
 
     @Override
@@ -105,7 +105,8 @@ public class EmployeePerfilServiceImpl implements EmployeePerfilService{
         checkFieldsFromUser(employeePerfil,true);
         employeePerfil.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         EmployeePerfil ongPerfil = userRepository.save(employeePerfil);
-        logSystemService.createLog(LogSystem.CREATE_EMPLOYEES, ongPerfil.getOngEmployeeId(), userLoggedService.getUserLogged().get().getId(), "create empĺoyee");
+        Perfil perfil = userLoggedService.getUserLogged().get();
+        logSystemService.createLog(LogSystem.CREATE_EMPLOYEES, ongPerfil.getOngEmployeeId(), perfil.getId(), "create empĺoyee by "+ perfil.getName());
         return employeeEntityToConvertEmployeeRequestGetDTO(ongPerfil);
     }
 
