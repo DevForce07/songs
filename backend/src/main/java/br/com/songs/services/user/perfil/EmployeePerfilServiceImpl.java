@@ -74,7 +74,7 @@ public class EmployeePerfilServiceImpl implements EmployeePerfilService{
         employeePerfil.setOngs(ongs);
         employeePerfil.setPassword(emplloyeeOld.getPassword());
         userRepository.save(employeePerfil);
-        logSystemService.createLog(LogSystem.UPDATE_EMPLOYEES,employeePerfil.getOngEmployeeId(), userLoggedService.getUserLogged().get().getId(), "update empĺoyee");
+        logSystemService.createLog(LogSystem.UPDATE_EMPLOYEES,employeePerfil.getOngEmployeeId(), userLoggedService.getUserLogged().get().getId(), "update employee");
 
     }
 
@@ -84,7 +84,8 @@ public class EmployeePerfilServiceImpl implements EmployeePerfilService{
         userLogged.setPassword(passwordEncoder.encode(password));
         checkFieldsFromUser(userLogged, false);
         userRepository.save(userLogged);
-        //TODO add log
+        EmployeeRequestGetDTO employeeRequestGetDTO = findById(userLogged.getId());
+        logSystemService.createLog(LogSystem.UPDATE_EMPLOYEES,employeeRequestGetDTO.getOngEmployeeId(), employeeRequestGetDTO.getId(), "update employee");
     }
 
     @Override
@@ -138,9 +139,9 @@ public class EmployeePerfilServiceImpl implements EmployeePerfilService{
     public void deleteUserCurrent() {
         Optional<Perfil> userLogged = userLoggedService.getUserLogged();
         if(userLogged.isPresent() && userLogged.get().getDecriminatorValue().isEmployee()){
+            EmployeeRequestGetDTO employeeRequestGetDTO = findById(userLogged.get().getId());
+            logSystemService.createLog(LogSystem.DELETE_EMPLOYEES, employeeRequestGetDTO.getOngEmployeeId(), employeeRequestGetDTO.getId(), "delete empĺoyee "+employeeRequestGetDTO.getName());
             userRepository.delete(userLogged.get());
-            logSystemService.createLog(LogSystem.DELETE_EMPLOYEES, ((EmployeePerfil) userLogged.get()).getOngEmployeeId(), userLoggedService.getUserLogged().get().getId(), "delete empĺoyee");
-
         }else{
             throw new UserNotFoundException("User not found");
         }
@@ -150,7 +151,12 @@ public class EmployeePerfilServiceImpl implements EmployeePerfilService{
     public void deleteUserById(long id) {
         Optional<Perfil> userLogged = userLoggedService.getUserLogged();
         if(userLogged.isPresent() && userLogged.get().getDecriminatorValue().isAdmin()){
+
+            EmployeeRequestGetDTO employeeRequestGetDTO = findById(id);
+            logSystemService.createLog(LogSystem.DELETE_EMPLOYEES, employeeRequestGetDTO.getOngEmployeeId(), userLoggedService.getUserLogged().get().getId(), "delete empĺoyee "+employeeRequestGetDTO.getName());
+
             userRepository.deleteById(id);
+
         }
     }
 
@@ -160,6 +166,10 @@ public class EmployeePerfilServiceImpl implements EmployeePerfilService{
                 password);
         long id = authenticateAndGenerateToken.getUserDTO().getId();
         EmployeeRequestGetDTO employeeRequestGetDTO = findById(id);
+
+        if(employeeRequestGetDTO.getOngEmployeeId() != 0){
+                logSystemService.createLog(LogSystem.LOGIN, employeeRequestGetDTO.getOngEmployeeId() , employeeRequestGetDTO.getId(), "novo login user employee "+employeeRequestGetDTO.getName());
+        }
 
         return EmployeeJwtToken.builder().token(authenticateAndGenerateToken.getToken()).expire(authenticateAndGenerateToken.getExpire()).userDTO(employeeRequestGetDTO).build();
     }
@@ -177,5 +187,9 @@ public class EmployeePerfilServiceImpl implements EmployeePerfilService{
         userLogged.setImageURL(newImageURL);
         checkFieldsFromUser(userLogged, false);
         userRepository.save(userLogged);
+
+        EmployeeRequestGetDTO employeeRequestGetDTO = findById(userLogged.getId());
+        logSystemService.createLog(LogSystem.UPDATE_EMPLOYEES,employeeRequestGetDTO.getOngEmployeeId(), employeeRequestGetDTO.getId(), "update employee "+employeeRequestGetDTO.getName());
+
     }
 }

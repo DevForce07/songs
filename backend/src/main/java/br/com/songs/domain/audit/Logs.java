@@ -31,6 +31,9 @@ public class Logs extends BaseEntity {
     @Column(name = "id_user")
     private long idUSer;
 
+    @Column(name = "username")
+    private String userName;
+
     private String message;
 
     @CreationTimestamp()

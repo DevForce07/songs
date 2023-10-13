@@ -28,4 +28,7 @@ public interface UserPerfilRepository extends JpaRepository<Perfil, Long> {
 	@Query(value = "SELECT a FROM AdminOngPerfil a WHERE a.id = :id")
 	AdminOngPerfil findByIdAdmin(@Param("id") long id);
 
+	@Query(value = "SELECT p.name FROM Perfil p WHERE p.id = :id")
+	String findUsernameById(@Param("id") long id);
+
 }

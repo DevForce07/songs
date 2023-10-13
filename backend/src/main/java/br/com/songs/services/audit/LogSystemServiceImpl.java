@@ -7,6 +7,7 @@ import br.com.songs.domain.entity.Perfil;
 import br.com.songs.exception.OperationException;
 import br.com.songs.repository.LogsRepository;
 import br.com.songs.services.user.login.UserLoggedService;
+import br.com.songs.services.user.perfil.PerfilService;
 import br.com.songs.web.dto.audit.LogDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -25,10 +26,13 @@ public class LogSystemServiceImpl implements LogSystemService{
     private LogsRepository repository;
     @Autowired
     private UserLoggedService userLoggedService;
+    @Autowired
+    PerfilService perfilService;
 
     @Override
     public void createLog(LogSystem logSystem, long idOng, long idUSer, String message) {
-        Logs log = Logs.builder().idUSer(idUSer).ongId(idOng).message(message).logSystem(logSystem).build();
+        String userName = perfilService.findUserNameById(idUSer);
+        Logs log = Logs.builder().idUSer(idUSer).ongId(idOng).message(message).logSystem(logSystem).userName(userName) .build();
         repository.save(log);
     }
 
@@ -40,7 +44,14 @@ public class LogSystemServiceImpl implements LogSystemService{
             throw new OperationException("unauthorized user");
         }
 
-        List<Logs> allByOngId = repository.findAllByOngId(id, pageable);
+        List<Logs> allByOngId = repository.findAllByOngIdOrderByCreatedOnDesc(id, pageable);
+        allByOngId.forEach( e-> {
+            if(e.getUserName() == null){
+                long idUSer = e.getIdUSer();
+                String userName = perfilService.findUserNameById(idUSer);
+                e.setUserName(userName);
+            }
+        });
         return LogConverter.convertLogToDTO(allByOngId);
     }
 }
