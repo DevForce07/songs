@@ -4,6 +4,7 @@ import br.com.songs.converter.ong.OngConverter;
 import br.com.songs.domain.audit.LogSystem;
 import br.com.songs.domain.entity.ActingArea;
 import br.com.songs.domain.entity.Ong;
+import br.com.songs.domain.entity.Perfil;
 import br.com.songs.domain.entity.Vacancies;
 import br.com.songs.exception.OperationException;
 import br.com.songs.repository.ActingAreaRepository;
@@ -90,7 +91,8 @@ public class VacanciesServiceImpl implements VacanciesService {
         Vacancies vacancies = convertVacanciesRequestPostDTOToVacanciesEntity(vacanciesRequestPostDTO);
         Ong ong = ongService.findOngEntityById(vacanciesRequestPostDTO.getOng());
         vacancies.setOng(ong);
-        logSystemService.createLog(LogSystem.CREATE_VACANCIES, ong.getId(), userLoggedService.getUserLogged().get().getId(), "create vacancies");
+        Perfil perfil = userLoggedService.getUserLogged().get();
+        logSystemService.createLog(LogSystem.CREATE_VACANCIES, ong.getId(), perfil.getId(), "create vacancies "+vacancies.getTitle() +" by "+ perfil.getName());
         return convertVacancies(repository.save(vacancies));
     }
 
@@ -105,15 +107,16 @@ public class VacanciesServiceImpl implements VacanciesService {
         Ong ong = ongService.findOngEntityById(vacanciesRequestPutDTO.getOng());
         vacancies.setOng(ong);
         convertVacancies(repository.save(vacancies));
-        logSystemService.createLog(LogSystem.UPDATE_VACANCIES, ong.getId(), userLoggedService.getUserLogged().get().getId(), "update vacancies");
+        Perfil perfil = userLoggedService.getUserLogged().get();
+        logSystemService.createLog(LogSystem.UPDATE_VACANCIES, ong.getId(), perfil.getId(), "update vacancies "+vacancies.getTitle() +" by "+ perfil.getName());
     }
 
     @Override
     public void deleteOngById(long id) {
         VacanciesRequestGetDTO vacanciesRequestGetDTO = findById(id);
+        Perfil perfil = userLoggedService.getUserLogged().get();
+        logSystemService.createLog(LogSystem.DELETE_VACANCIES,vacanciesRequestGetDTO.getOng().getId(), perfil.getId(), "delete vacancies "+vacanciesRequestGetDTO.getTitle() +" by "+ perfil.getName());
         repository.deleteById(id);
-        logSystemService.createLog(LogSystem.DELETE_VACANCIES,vacanciesRequestGetDTO.getOng().getId(), userLoggedService.getUserLogged().get().getId(), "delete vacancies");
-
     }
 
     private List<VacanciesRequestGetDTO> convertVacancies(List<Vacancies> vacanciesList){
