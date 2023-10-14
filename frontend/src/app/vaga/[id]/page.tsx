@@ -198,7 +198,7 @@ export default function Vaga() {
               type='submit'
               className='bg-cyan-700 p-4 rounded text-neutral-50 font-bold hover:bg-cyan-800 transition-colors disabled:cursor-not-allowed disabled:bg-cyan-800/70 disabled:hover:bg-cyan-800/70'
             >
-              Enviar
+              {isLoading ? 'Enviando...' : 'Enviar'}
             </button>
           </form>
         </div>

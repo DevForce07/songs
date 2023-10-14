@@ -40,3 +40,11 @@ export type Application = {
   email: string;
   message: string;
 };
+
+export type LogSystem = {
+  id: number;
+  idUSer: number;
+  logSystem: string;
+  created: string;
+  message: string;
+};
