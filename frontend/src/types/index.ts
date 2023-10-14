@@ -43,8 +43,8 @@ export type Application = {
 
 export type LogSystem = {
   id: number;
-  idUSer: number;
   logSystem: string;
-  created: string;
+  userName: string;
   message: string;
+  dateTime: string;
 };

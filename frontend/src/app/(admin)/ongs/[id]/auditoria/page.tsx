@@ -20,30 +20,6 @@ const logSystemEnum = {
   DELETE_EMPLOYEES: 'Exclusão de Funcionário',
 };
 
-// interface UserAuditoriaProps {
-//   id: number;
-// }
-
-// function UserAuditoria({ id }: UserAuditoriaProps) {
-//   const [employee, setEmployee] = useState<User | null>(null);
-
-//   async function getEmployeeAudits() {
-//     try {
-//       const response = await api.get(`/employees/findById/${id}`);
-
-//       setEmployee(response.data);
-//       console.log(response.data);
-//     } catch (error) {
-//       console.log(error);
-//     }
-//   }
-
-//   useEffect(() => {
-//     getEmployeeAudits();
-//   }, []);
-//   return <span className='text-sm'>por: {employee?.name}</span>;
-// }
-
 export default function Auditoria() {
   const [audits, setAudits] = useState<LogSystem[]>([]);
 
@@ -72,7 +48,7 @@ export default function Auditoria() {
         {audits.map((audit) => (
           <div className='flex flex-col gap-2 border p-4 rounded-lg bg-neutral-100'>
             <span className='text-gray-500 text-sm'>
-              {new Date(audit.created).toLocaleDateString('pt-BR', {
+              {new Date(audit.dateTime).toLocaleDateString('pt-BR', {
                 day: 'numeric',
                 month: 'long',
                 year: 'numeric',
@@ -83,8 +59,9 @@ export default function Auditoria() {
               <p className='font-bold text-cyan-700'>
                 {logSystemEnum[audit.logSystem as keyof typeof logSystemEnum]}
               </p>
-              {/* <UserAuditoria id={audit.idUSer} /> */}
-              <span className='text-sm'>por: {audit.username || 'yuri'}</span>
+              <span className='text-sm text-neutral-500'>
+                por: {audit.userName}
+              </span>
             </div>
           </div>
         ))}
