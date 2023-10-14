@@ -7,7 +7,10 @@ COPY . .
 
 RUN ./gradlew clean build
 
-EXPOSE 8080
+FROM openjdk:17-jdk-slim
+EXPOSE 8888
+EXPOSE 80
+EXPOSE 443
 
 COPY /build/libs/songs-0.0.1-SNAPSHOT.jar app.jar
 
