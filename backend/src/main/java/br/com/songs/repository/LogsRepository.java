@@ -10,5 +10,5 @@ import java.util.List;
 
 @Repository
 public interface LogsRepository extends JpaRepository<Logs, Long> {
-    List<Logs> findAllByOngId(long id, Pageable pageable);
+    List<Logs> findAllByOngIdOrderByCreatedOnDesc(long id, Pageable pageable);
 }

@@ -16,8 +16,8 @@ public class LogConverter {
         return logs == null ? new ArrayList<>():logs.stream().map(LogConverter::convertLogToDTO).collect(Collectors.toList());
     }
     public static LogDTO convertLogToDTO(Logs logs){
-        return LogDTO.builder().id(logs.getId()).idUSer(logs.getIdUSer())
-                .logSystem(logs.getLogSystem().toString()).created(convertTimesTamp(logs.getCreatedOn()))
+        return LogDTO.builder().id(logs.getId()).userName(logs.getUserName())
+                .logSystem(logs.getLogSystem().toString()).dateTime(convertTimesTamp(logs.getCreatedOn()))
                 .message(logs.getMessage()).build();
     }
 

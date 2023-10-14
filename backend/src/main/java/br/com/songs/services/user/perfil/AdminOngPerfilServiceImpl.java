@@ -76,7 +76,7 @@ public class AdminOngPerfilServiceImpl implements AdminOngPerfilService{
         userRepository.save(adminOngPerfil);
 
         adminOngPerfil.getOngs().stream().forEach(e ->{
-                    logSystemService.createLog(LogSystem.UPDATE_ADMIN,e.getId(), userLoggedService.getUserLogged().get().getId(), "update admin");
+                    logSystemService.createLog(LogSystem.UPDATE_ADMIN,e.getId(), userLoggedService.getUserLogged().get().getId(), "update admin "+adminOngPerfil.getName());
                 }
 
         );
@@ -90,7 +90,7 @@ public class AdminOngPerfilServiceImpl implements AdminOngPerfilService{
         checkFieldsFromUser(userLogged, false);
         userRepository.save(userLogged);
         userLogged.getOngs().stream().forEach(e ->{
-            logSystemService.createLog(LogSystem.UPDATE_ADMIN,e.getId(), userLoggedService.getUserLogged().get().getId(), "update admin");
+            logSystemService.createLog(LogSystem.UPDATE_ADMIN,e.getId(), userLoggedService.getUserLogged().get().getId(), "update admin"+userLoggedService.getUserLogged().get().getName());
         });
     }
 
@@ -112,7 +112,11 @@ public class AdminOngPerfilServiceImpl implements AdminOngPerfilService{
     @Override
     public void deleteUserCurrent() {
         Optional<Perfil> userLogged = userLoggedService.getUserLogged();
-        if(userLogged.isPresent()&& userLogged.get().getDecriminatorValue().isAdmin()){
+        if(userLogged.isPresent() && userLogged.get().getDecriminatorValue().isAdmin()){
+            List<Ong> ongs = userLogged.get().getOngs();
+            ongs.forEach(e->{
+                logSystemService.createLog(LogSystem.DELETE_ADMIN,e.getId(), userLogged.get().getId(), "usuário administrador "+userLoggedService.getUserLogged().get().getName()+" deleted");
+            });
             userRepository.delete(userLogged.get());
         }else{
             throw new UserNotFoundException("User not found");
@@ -125,8 +129,14 @@ public class AdminOngPerfilServiceImpl implements AdminOngPerfilService{
                 password);
         long id = authenticateAndGenerateToken.getUserDTO().getId();
 
-
         AdminOngRequestGetDTO adminOngRequestGetDTO = findById(id);
+
+        if(!adminOngRequestGetDTO.getOngs().isEmpty()){
+            adminOngRequestGetDTO.getOngs().forEach(e->{
+                logSystemService.createLog(LogSystem.LOGIN,e.getId(), adminOngRequestGetDTO.getId(), "novo login user admin: "+adminOngRequestGetDTO.getName());
+            });
+
+        }
 
         return AdminJwtToken.builder().token(authenticateAndGenerateToken.getToken()).expire(authenticateAndGenerateToken.getExpire()).userDTO(adminOngRequestGetDTO).build();
     }
@@ -145,7 +155,7 @@ public class AdminOngPerfilServiceImpl implements AdminOngPerfilService{
         checkFieldsFromUser(userLogged, false);
         userRepository.save(userLogged);
         userLogged.getOngs().stream().forEach(e ->{
-            logSystemService.createLog(LogSystem.UPDATE_ADMIN,e.getId(), userLoggedService.getUserLogged().get().getId(), "update admin");
+            logSystemService.createLog(LogSystem.UPDATE_ADMIN,e.getId(), userLoggedService.getUserLogged().get().getId(), "update admin "+userLoggedService.getUserLogged().get());
         });
     }
 }

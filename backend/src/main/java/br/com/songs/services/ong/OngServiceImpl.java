@@ -87,7 +87,7 @@ public class OngServiceImpl implements OngService {
 
         Optional<Perfil> userLogged = userLoggedService.getUserLogged();
 
-        if(userLogged.isEmpty() || !userLogged.get().getDecriminatorValue().isAdmin()){
+        if(userLogged.isEmpty() || !isPerfilLoggedIsAdmin(userLogged.get())){
             throw new UserNotFoundException("User admin not found");
         }
 
@@ -100,8 +100,9 @@ public class OngServiceImpl implements OngService {
         ong.setActingArea(areaOptional.get());
         ong.setPerfil(userLoggedService.getUserLogged().get());
         Ong saved = repository.save(ong);
-
-        logSystemService.createLog(LogSystem.CREATE_ONG,ong.getId(), userLoggedService.getUserLogged().get().getId(), "criando uma nova ong");
+        Perfil perfil = userLoggedService.getUserLogged().get();
+        boolean isAdmin = isPerfilLoggedIsAdmin(perfil);
+        logSystemService.createLog(LogSystem.CREATE_ONG,ong.getId(), userLoggedService.getUserLogged().get().getId(), "create new ong: "+ong.getName()+" by user "+(isAdmin ? "admin":"employee")+perfil.getName());
 
         return convertOngEntity(saved);
     }
@@ -111,7 +112,7 @@ public class OngServiceImpl implements OngService {
 
         Optional<Perfil> userLogged = userLoggedService.getUserLogged();
 
-        if(userLogged.isEmpty() || !userLogged.get().getDecriminatorValue().isAdmin()){
+        if(userLogged.isEmpty() || !isPerfilLoggedIsAdmin(userLogged.get())){
             throw new UserNotFoundException("User admin not found");
         }
 
@@ -133,6 +134,11 @@ public class OngServiceImpl implements OngService {
         ong.setUrlImage(newImageURL);
 
         repository.save(ong);
+
+
+        Perfil perfil = userLoggedService.getUserLogged().get();
+        boolean isAdmin = isPerfilLoggedIsAdmin(perfil);
+        logSystemService.createLog(LogSystem.UPDATE_ONG, ong.getId(),userLoggedService.getUserLogged().get().getId(), "update ong "+ong.getName()+" by user "+(isAdmin ? "admin":"employee")+perfil.getName());
     }
 
     @Override
@@ -160,7 +166,9 @@ public class OngServiceImpl implements OngService {
 
         repository.save(ong);
 
-        logSystemService.createLog(LogSystem.UPDATE_ONG, ong.getId(),userLoggedService.getUserLogged().get().getId(), "alterando ong");
+        Perfil perfil = userLoggedService.getUserLogged().get();
+        boolean isAdmin = isPerfilLoggedIsAdmin(perfil);
+        logSystemService.createLog(LogSystem.UPDATE_ONG, ong.getId(),userLoggedService.getUserLogged().get().getId(), "update ong "+ong.getName()+" by user "+(isAdmin ? "admin":"employee")+perfil.getName());
     }
 
     @Override
@@ -172,10 +180,19 @@ public class OngServiceImpl implements OngService {
             throw new OperationException("operation not permitted");
         }
 
-        if(userLogged.isEmpty() || !userLogged.get().getDecriminatorValue().isAdmin()){
+        if(userLogged.isEmpty() || !isPerfilLoggedIsAdmin(userLogged.get())){
             throw new UserNotFoundException("User admin not found");
         }
+
+        Perfil perfil = userLoggedService.getUserLogged().get();
+        boolean isAdmin = isPerfilLoggedIsAdmin(perfil);
+        logSystemService.createLog(LogSystem.DELETE_ONG, requestGetDTO.getId(),userLoggedService.getUserLogged().get().getId(), "delete ong "+requestGetDTO.getName()+" by user "+(isAdmin ? "admin":"employee")+perfil.getName());
         repository.deleteById(requestGetDTO.getId());
+
+    }
+
+    private static boolean isPerfilLoggedIsAdmin(Perfil perfil) {
+        return perfil.getDecriminatorValue().isAdmin();
     }
 
     private List<OngRequestGetDTO> convertOngEntity(List<Ong> ong){
