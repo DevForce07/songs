@@ -6,9 +6,9 @@ spring:
     name: listit
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/songs?allowPublicKeyRetrieval=true&useSSL=false
-    username: dev
-    password: dev456
+    url: jdbc:mysql://db4free.net:3306/songs_uem?allowPublicKeyRetrieval=true&useSSL=false
+    username: devsongs123
+    password: qwe123dfg
     testWhileIdle: true
     validationQuery: SELECT 1
   jpa:
