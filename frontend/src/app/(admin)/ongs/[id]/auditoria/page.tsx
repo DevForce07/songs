@@ -1,9 +1,10 @@
 'use client';
 
+import { AuthContext } from '@/contexts/auth-context';
 import { api } from '@/lib/axios';
 import { LogSystem, User } from '@/types';
-import { useParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { redirect, useParams } from 'next/navigation';
+import { useContext, useEffect, useState } from 'react';
 
 const logSystemEnum = {
   LOGIN: 'Login',
@@ -21,6 +22,12 @@ const logSystemEnum = {
 };
 
 export default function Auditoria() {
+  const { isAuthLoading, isAuthenticaded } = useContext(AuthContext);
+
+  if (!isAuthLoading && !isAuthenticaded) {
+    redirect('/entrar');
+  }
+
   const [audits, setAudits] = useState<LogSystem[]>([]);
 
   const { id } = useParams();
