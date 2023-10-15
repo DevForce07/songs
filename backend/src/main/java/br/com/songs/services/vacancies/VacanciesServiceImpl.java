@@ -47,7 +47,7 @@ public class VacanciesServiceImpl implements VacanciesService {
         Optional<Vacancies> vacanciesOptional = repository.findById(id);
 
         if(vacanciesOptional.isEmpty()){
-            throw new OperationException("not found");
+            throw new OperationException("id não encontrado");
         }
 
         return convertVacancies(vacanciesOptional.get());
@@ -92,7 +92,7 @@ public class VacanciesServiceImpl implements VacanciesService {
         Ong ong = ongService.findOngEntityById(vacanciesRequestPostDTO.getOng());
         vacancies.setOng(ong);
         Perfil perfil = userLoggedService.getUserLogged().get();
-        logSystemService.createLog(LogSystem.CREATE_VACANCIES, ong.getId(), perfil.getId(), "create vacancies "+vacancies.getTitle() +" by "+ perfil.getName());
+        logSystemService.createLog(LogSystem.CREATE_VACANCIES, ong.getId(), perfil.getId(), "vaga criada "+vacancies.getTitle() +" por "+ perfil.getName());
         return convertVacancies(repository.save(vacancies));
     }
 
@@ -101,21 +101,21 @@ public class VacanciesServiceImpl implements VacanciesService {
         Vacancies vacancies = convertVacanciesRequestPutDTOToVacanciesEntity(vacanciesRequestPutDTO);
 
         if(vacancies.getId()==0){
-            throw new OperationException("id vacancies not found");
+            throw new OperationException("id vaga não encontrada");
         }
 
         Ong ong = ongService.findOngEntityById(vacanciesRequestPutDTO.getOng());
         vacancies.setOng(ong);
         convertVacancies(repository.save(vacancies));
         Perfil perfil = userLoggedService.getUserLogged().get();
-        logSystemService.createLog(LogSystem.UPDATE_VACANCIES, ong.getId(), perfil.getId(), "update vacancies "+vacancies.getTitle() +" by "+ perfil.getName());
+        logSystemService.createLog(LogSystem.UPDATE_VACANCIES, ong.getId(), perfil.getId(), "vaga atualizada "+vacancies.getTitle() +" por "+ perfil.getName());
     }
 
     @Override
     public void deleteOngById(long id) {
         VacanciesRequestGetDTO vacanciesRequestGetDTO = findById(id);
         Perfil perfil = userLoggedService.getUserLogged().get();
-        logSystemService.createLog(LogSystem.DELETE_VACANCIES,vacanciesRequestGetDTO.getOng().getId(), perfil.getId(), "delete vacancies "+vacanciesRequestGetDTO.getTitle() +" by "+ perfil.getName());
+        logSystemService.createLog(LogSystem.DELETE_VACANCIES,vacanciesRequestGetDTO.getOng().getId(), perfil.getId(), "vaga deletada "+vacanciesRequestGetDTO.getTitle() +" por "+ perfil.getName());
         repository.deleteById(id);
     }
 
@@ -124,11 +124,16 @@ public class VacanciesServiceImpl implements VacanciesService {
     }
     private VacanciesRequestGetDTO convertVacancies(Vacancies vacancies){
         VacanciesRequestGetDTO vacanciesRequestGetDTO = convertOVacanciesToOngRequestGetDTO(vacancies);
-        OngRequestGetDTO ongRequestGetDTO = OngConverter.convertOngEntityToOngRequestGetDTO(vacancies.getOng());
-        Optional<ActingArea> ongOptional = actingAreaRepository.findById(vacancies.getOng().getActingArea().getId());
-        ActingAreaDTO actingAreaDTO = convertActingAreaEntityToActingAreaDTO(ongOptional.get());
-        ongRequestGetDTO.setActingArea(actingAreaDTO);
-        vacanciesRequestGetDTO.setOng(ongRequestGetDTO);
+
+        if(vacancies.getOng() != null){
+            OngRequestGetDTO ongRequestGetDTO = OngConverter.convertOngEntityToOngRequestGetDTO(vacancies.getOng());
+            Optional<ActingArea> ongOptional = actingAreaRepository.findById(vacancies.getOng().getActingArea().getId());
+            ActingAreaDTO actingAreaDTO = convertActingAreaEntityToActingAreaDTO(ongOptional.get());
+            ongRequestGetDTO.setActingArea(actingAreaDTO);
+            vacanciesRequestGetDTO.setOng(ongRequestGetDTO);
+        }
+
+
         return vacanciesRequestGetDTO;
     }
 }

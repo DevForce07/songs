@@ -36,7 +36,7 @@ public class FileUploadServiceImpl implements FileUploadService{
             Path filePath = uploadPath.resolve(fileCode);
             Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException ioe) {
-            throw new IOException("Could not save file: " + fileName, ioe);
+            throw new IOException("não foi pssível salvar o arquivo: " + fileName, ioe);
         }
 
         return context.getContextPath()+"/api/img/"+fileCode;

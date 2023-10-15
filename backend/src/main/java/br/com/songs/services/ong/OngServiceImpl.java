@@ -64,7 +64,7 @@ public class OngServiceImpl implements OngService {
     public Ong findOngEntityById(long id) {
         Optional<Ong> ongOptional = repository.findById(id);
 
-        Ong ong = ongOptional.orElseThrow(() -> new OngNotFoundException("Ong not found using id " + id));
+        Ong ong = ongOptional.orElseThrow(() -> new OngNotFoundException("Ong não encontrada usando o id " + id));
 
         return ong;
     }
@@ -88,13 +88,13 @@ public class OngServiceImpl implements OngService {
         Optional<Perfil> userLogged = userLoggedService.getUserLogged();
 
         if(userLogged.isEmpty() || !isPerfilLoggedIsAdmin(userLogged.get())){
-            throw new UserNotFoundException("User admin not found");
+            throw new UserNotFoundException("Usuário administrador não encontrado");
         }
 
         Optional<ActingArea> areaOptional = actingAreaRepository.findById(ongRequestPostDTO.getActingArea());
 
         if(areaOptional.isEmpty()){
-            throw new OperationException("Acting area not found or is null");
+            throw new OperationException("Área de atuação não encontrada ou id null");
         }
 
         ong.setActingArea(areaOptional.get());
@@ -102,7 +102,7 @@ public class OngServiceImpl implements OngService {
         Ong saved = repository.save(ong);
         Perfil perfil = userLoggedService.getUserLogged().get();
         boolean isAdmin = isPerfilLoggedIsAdmin(perfil);
-        logSystemService.createLog(LogSystem.CREATE_ONG,ong.getId(), userLoggedService.getUserLogged().get().getId(), "create new ong: "+ong.getName()+" by user "+(isAdmin ? "admin":"employee")+perfil.getName());
+        logSystemService.createLog(LogSystem.CREATE_ONG,ong.getId(), userLoggedService.getUserLogged().get().getId(), "nova ong criada: "+ong.getName()+" pelo usuario "+(isAdmin ? "administrador":"funcionario")+perfil.getName());
 
         return convertOngEntity(saved);
     }
@@ -113,13 +113,13 @@ public class OngServiceImpl implements OngService {
         Optional<Perfil> userLogged = userLoggedService.getUserLogged();
 
         if(userLogged.isEmpty() || !isPerfilLoggedIsAdmin(userLogged.get())){
-            throw new UserNotFoundException("User admin not found");
+            throw new UserNotFoundException("Usuário administrador não encontrado");
         }
 
         Optional<Ong> ongOptional = repository.findById(idOng);
 
         if(ongOptional.isEmpty()){
-            throw  new OperationException("ong not found");
+            throw  new OperationException("ong não encontrada");
         }
 
         Ong ong = ongOptional.get();
@@ -138,7 +138,7 @@ public class OngServiceImpl implements OngService {
 
         Perfil perfil = userLoggedService.getUserLogged().get();
         boolean isAdmin = isPerfilLoggedIsAdmin(perfil);
-        logSystemService.createLog(LogSystem.UPDATE_ONG, ong.getId(),userLoggedService.getUserLogged().get().getId(), "update ong "+ong.getName()+" by user "+(isAdmin ? "admin":"employee")+perfil.getName());
+        logSystemService.createLog(LogSystem.UPDATE_ONG, ong.getId(),userLoggedService.getUserLogged().get().getId(), "ong alterada "+ong.getName()+" pelo usuário "+(isAdmin ? "administrador":"funcionário")+perfil.getName());
     }
 
     @Override
@@ -148,7 +148,7 @@ public class OngServiceImpl implements OngService {
         Perfil perfilLogged = userLoggedService.getUserLogged().get();
 
         if(perfilLogged.getOngs() != null &&!perfilLogged.getOngs().stream().map(Ong::getId).anyMatch(id -> Long.compare(id, requestGetDTO.getId()) == 0)){
-            throw new OperationException("operation not permitted");
+            throw new OperationException("operação não permitida");
         }
 
         Ong ong = convertOngRequestPutDTOToOngEntity(ongRequestPutDTO);
@@ -158,7 +158,7 @@ public class OngServiceImpl implements OngService {
         Optional<ActingArea> ongOptional = actingAreaRepository.findById(ongRequestPutDTO.getActingArea());
 
         if(ongOptional.isEmpty()){
-            throw new OperationException("Acting area not found or is null");
+            throw new OperationException("Área de atuação não encontrada ou id igual a null");
         }
 
         ong.setActingArea(ongOptional.get());
@@ -168,7 +168,7 @@ public class OngServiceImpl implements OngService {
 
         Perfil perfil = userLoggedService.getUserLogged().get();
         boolean isAdmin = isPerfilLoggedIsAdmin(perfil);
-        logSystemService.createLog(LogSystem.UPDATE_ONG, ong.getId(),userLoggedService.getUserLogged().get().getId(), "update ong "+ong.getName()+" by user "+(isAdmin ? "admin":"employee")+perfil.getName());
+        logSystemService.createLog(LogSystem.UPDATE_ONG, ong.getId(),userLoggedService.getUserLogged().get().getId(), "ong atualizada "+ong.getName()+" pelo usuário "+(isAdmin ? "administrador":"funcionário")+perfil.getName());
     }
 
     @Override
@@ -177,16 +177,16 @@ public class OngServiceImpl implements OngService {
         OngRequestGetDTO requestGetDTO = findById(id);
 
         if(userLogged.get().getOngs() != null && !userLogged.get().getOngs().stream().map(Ong::getId).anyMatch(idOng -> Long.compare(idOng, id) == 0)){
-            throw new OperationException("operation not permitted");
+            throw new OperationException("operação não permitida");
         }
 
         if(userLogged.isEmpty() || !isPerfilLoggedIsAdmin(userLogged.get())){
-            throw new UserNotFoundException("User admin not found");
+            throw new UserNotFoundException("usuário administrador não encontrado");
         }
 
         Perfil perfil = userLoggedService.getUserLogged().get();
         boolean isAdmin = isPerfilLoggedIsAdmin(perfil);
-        logSystemService.createLog(LogSystem.DELETE_ONG, requestGetDTO.getId(),userLoggedService.getUserLogged().get().getId(), "delete ong "+requestGetDTO.getName()+" by user "+(isAdmin ? "admin":"employee")+perfil.getName());
+        logSystemService.createLog(LogSystem.DELETE_ONG, requestGetDTO.getId(),userLoggedService.getUserLogged().get().getId(), "ong deletada "+requestGetDTO.getName()+" pelo usuário "+(isAdmin ? "administrador":"funcionário")+perfil.getName());
         repository.deleteById(requestGetDTO.getId());
 
     }

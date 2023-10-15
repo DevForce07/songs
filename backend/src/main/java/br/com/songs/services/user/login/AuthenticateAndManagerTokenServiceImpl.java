@@ -50,9 +50,9 @@ public class AuthenticateAndManagerTokenServiceImpl implements AuthenticateAndMa
 		try {
 			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
 		} catch (DisabledException e) {
-			throw new UserDisabledException("User disabled " + e);
+			throw new UserDisabledException("Usuario desabilitado " + e);
 		} catch (BadCredentialsException e) {
-			throw new BadCredentialsCustomException("invalid credentials");
+			throw new BadCredentialsCustomException("credenciais invalidas");
 		}
 	}
 

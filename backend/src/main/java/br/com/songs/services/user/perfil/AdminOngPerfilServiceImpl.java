@@ -54,7 +54,7 @@ public class AdminOngPerfilServiceImpl implements AdminOngPerfilService{
         AdminOngPerfil byIdAdmin = userRepository.findByIdAdmin(id);
 
         if (byIdAdmin == null){
-            throw new UserNotFoundException("Use admin fot found");
+            throw new UserNotFoundException("usuário administrador não encontrado");
         }
         return adminOngEntityToConvertUserOngRequestGetDTO(byIdAdmin);
     }
@@ -65,7 +65,7 @@ public class AdminOngPerfilServiceImpl implements AdminOngPerfilService{
         Optional<Perfil> userLogged = userLoggedService.getUserLogged();
 
         if (adminOngPerfil.getId() == 0){
-            throw new UserNotFoundException("ID not found");
+            throw new UserNotFoundException("ID não encontrado");
         }
 
         List<Ong> ongs = ongService.findIn(userDTO.getOngs());
@@ -76,7 +76,7 @@ public class AdminOngPerfilServiceImpl implements AdminOngPerfilService{
         userRepository.save(adminOngPerfil);
 
         adminOngPerfil.getOngs().stream().forEach(e ->{
-                    logSystemService.createLog(LogSystem.UPDATE_ADMIN,e.getId(), userLoggedService.getUserLogged().get().getId(), "update admin "+adminOngPerfil.getName());
+                    logSystemService.createLog(LogSystem.UPDATE_ADMIN,e.getId(), userLoggedService.getUserLogged().get().getId(), "administrador atualizado "+adminOngPerfil.getName());
                 }
 
         );
@@ -90,7 +90,7 @@ public class AdminOngPerfilServiceImpl implements AdminOngPerfilService{
         checkFieldsFromUser(userLogged, false);
         userRepository.save(userLogged);
         userLogged.getOngs().stream().forEach(e ->{
-            logSystemService.createLog(LogSystem.UPDATE_ADMIN,e.getId(), userLoggedService.getUserLogged().get().getId(), "update admin"+userLoggedService.getUserLogged().get().getName());
+            logSystemService.createLog(LogSystem.UPDATE_ADMIN,e.getId(), userLoggedService.getUserLogged().get().getId(), "administrador atualizado "+userLoggedService.getUserLogged().get().getName());
         });
     }
 
@@ -98,7 +98,7 @@ public class AdminOngPerfilServiceImpl implements AdminOngPerfilService{
     public AdminOngRequestGetDTO createUser(AdminOngRequestPostDTO userDTO) {
         AdminOngPerfil adminOngPerfil = convertUserOngRequestPostDTOToAdminOngEntity(userDTO);
         if(userRepository.existsPerfilByEmail(adminOngPerfil.getEmail())){
-            throw new UserNotFoundException("Erro email already exists");
+            throw new UserNotFoundException("Erro email já existente");
         }
 
         checkFieldsFromUser(adminOngPerfil, true);
@@ -115,11 +115,11 @@ public class AdminOngPerfilServiceImpl implements AdminOngPerfilService{
         if(userLogged.isPresent() && userLogged.get().getDecriminatorValue().isAdmin()){
             List<Ong> ongs = userLogged.get().getOngs();
             ongs.forEach(e->{
-                logSystemService.createLog(LogSystem.DELETE_ADMIN,e.getId(), userLogged.get().getId(), "usuário administrador "+userLoggedService.getUserLogged().get().getName()+" deleted");
+                logSystemService.createLog(LogSystem.DELETE_ADMIN,e.getId(), userLogged.get().getId(), "usuário administrador "+userLoggedService.getUserLogged().get().getName()+" deletado");
             });
             userRepository.delete(userLogged.get());
         }else{
-            throw new UserNotFoundException("User not found");
+            throw new UserNotFoundException("Usuário não encontrado");
         }
     }
 
@@ -133,7 +133,7 @@ public class AdminOngPerfilServiceImpl implements AdminOngPerfilService{
 
         if(!adminOngRequestGetDTO.getOngs().isEmpty()){
             adminOngRequestGetDTO.getOngs().forEach(e->{
-                logSystemService.createLog(LogSystem.LOGIN,e.getId(), adminOngRequestGetDTO.getId(), "novo login user admin: "+adminOngRequestGetDTO.getName());
+                logSystemService.createLog(LogSystem.LOGIN,e.getId(), adminOngRequestGetDTO.getId(), "novo login usuário administrador: "+adminOngRequestGetDTO.getName());
             });
 
         }
@@ -155,7 +155,7 @@ public class AdminOngPerfilServiceImpl implements AdminOngPerfilService{
         checkFieldsFromUser(userLogged, false);
         userRepository.save(userLogged);
         userLogged.getOngs().stream().forEach(e ->{
-            logSystemService.createLog(LogSystem.UPDATE_ADMIN,e.getId(), userLoggedService.getUserLogged().get().getId(), "update admin "+userLoggedService.getUserLogged().get());
+            logSystemService.createLog(LogSystem.UPDATE_ADMIN,e.getId(), userLoggedService.getUserLogged().get().getId(), "administrador atualizado "+userLoggedService.getUserLogged().get().getName());
         });
     }
 }
