@@ -21,19 +21,19 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class PerfilConverter {
-    private static final String MESSAGE_PASSWORD_INCORRECT = "password must contain at least eight characters, at least one letter, one number and one special character";
+    private static final String MESSAGE_PASSWORD_INCORRECT = "a senha deve conter pelo menos oito caracteres, pelo menos uma letra, um número e um caractere especial";
 
     public static void checkFieldsFromUser(Perfil user, boolean verifyPassword) {
         if (!StringInputValidationUtil.isValidCpf(user.getDocument())) {
-            throw new OperationException("cpf not valid");
+            throw new OperationException("cpf não valido");
         }
 
         if (!StringInputValidationUtil.isValidEmail(user.getEmail())) {
-            throw new OperationException("email not valid");
+            throw new OperationException("email não valido");
         }
 
         if (StringUtils.isBlank(user.getName())) {
-            throw new OperationException("name can not to be blank");
+            throw new OperationException("nome não pode ser vazio");
         }
 
 //        if (!StringInputValidationUtil.isValidPhoneNumber(user.getPhoneNumber())) {
@@ -41,7 +41,7 @@ public class PerfilConverter {
 //        }
 
         if (verifyPassword && StringUtils.isBlank(user.getPassword())) {
-            throw new OperationException("password can not to be blank");
+            throw new OperationException("senha não pode ser vazio");
         }
 
         if (verifyPassword && !StringInputValidationUtil.isValidPassword(user.getPassword())) {
@@ -77,7 +77,7 @@ public class PerfilConverter {
     }
 
     public static Perfil extratUserOrThrowException(Optional<Perfil> userCurrent) {
-        return userCurrent.orElseThrow(() -> new UserNotFoundException("User not found"));
+        return userCurrent.orElseThrow(() -> new UserNotFoundException("Usuário não encontrado"));
     }
 
     public static PerfilOngRequestGetDTO convertPerfilEntityToPerfilRequestGetDTO(Perfil user) {

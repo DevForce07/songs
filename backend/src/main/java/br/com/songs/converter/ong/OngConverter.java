@@ -14,15 +14,15 @@ public class OngConverter {
 
     public static void checkFieldsFromOng(Ong ong) {
         if (!StringInputValidationUtil.isValidCnpj(ong.getCnpj())) {
-            throw new OperationException("cnpj not valid");
+            throw new OperationException("cnpj não valido");
         }
 
         if (!StringInputValidationUtil.isValidEmail(ong.getEmail())) {
-            throw new OperationException("email not valid");
+            throw new OperationException("email não valido");
         }
 
         if (StringUtils.isBlank(ong.getName())) {
-            throw new OperationException("name can not to be blank");
+            throw new OperationException("nome não pode estar vazio");
         }
 
 //        if (!StringInputValidationUtil.isValidPhoneNumber(ong.getPhoneNumber())) {
@@ -30,7 +30,7 @@ public class OngConverter {
 //        }
 
         if (ong.getAddress()==null) {
-            throw new OperationException("address is empty");
+            throw new OperationException("endereço vazio");
         }
 
     }

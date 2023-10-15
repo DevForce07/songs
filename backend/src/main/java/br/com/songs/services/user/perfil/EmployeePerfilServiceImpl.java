@@ -57,14 +57,14 @@ public class EmployeePerfilServiceImpl implements EmployeePerfilService{
         PerfilOngRequestGetDTO perfilLogged = userLoggedService.getPerfilLogged();
 
         if (employeePerfil.getId() == 0 || perfilLogged.getId() != employeePerfil.getId() ){
-            throw new UserNotFoundException("ID not found");
+            throw new UserNotFoundException("ID não encontrado");
         }
 
 
         EmployeePerfil emplloyeeOld = userRepository.findByIdEmplloyee(employeePerfil.getId());
 
         if (emplloyeeOld == null){
-            throw new UserNotFoundException("ID user not found");
+            throw new UserNotFoundException("ID não encontrado");
         }
 
         checkoutIfExistsOng(employeePerfil);
@@ -74,7 +74,7 @@ public class EmployeePerfilServiceImpl implements EmployeePerfilService{
         employeePerfil.setOngs(ongs);
         employeePerfil.setPassword(emplloyeeOld.getPassword());
         userRepository.save(employeePerfil);
-        logSystemService.createLog(LogSystem.UPDATE_EMPLOYEES,employeePerfil.getOngEmployeeId(), userLoggedService.getUserLogged().get().getId(), "update employee by "+employeePerfil.getName());
+        logSystemService.createLog(LogSystem.UPDATE_EMPLOYEES,employeePerfil.getOngEmployeeId(), userLoggedService.getUserLogged().get().getId(), "funcionário atualizado por "+employeePerfil.getName());
 
     }
 
@@ -85,7 +85,7 @@ public class EmployeePerfilServiceImpl implements EmployeePerfilService{
         checkFieldsFromUser(userLogged, false);
         userRepository.save(userLogged);
         EmployeeRequestGetDTO employeeRequestGetDTO = findById(userLogged.getId());
-        logSystemService.createLog(LogSystem.UPDATE_EMPLOYEES,employeeRequestGetDTO.getOngEmployeeId(), employeeRequestGetDTO.getId(), "update employee by "+employeeRequestGetDTO.getName());
+        logSystemService.createLog(LogSystem.UPDATE_EMPLOYEES,employeeRequestGetDTO.getOngEmployeeId(), employeeRequestGetDTO.getId(), "ufuncionário atualizado por "+employeeRequestGetDTO.getName());
     }
 
     @Override
@@ -93,11 +93,11 @@ public class EmployeePerfilServiceImpl implements EmployeePerfilService{
         EmployeePerfil employeePerfil = convertEmployeeRequestPostDTOToEmployeeEntity(userDTO);
         Optional<Perfil> userLogged = userLoggedService.getUserLogged();
         if(!userLogged.isPresent() || !userLogged.get().getDecriminatorValue().isAdmin()){
-            throw new UserNotFoundException("User admin not found");
+            throw new UserNotFoundException("Usuário administrador não encontrado");
         }
 
         if(userRepository.existsPerfilByEmail(userDTO.getEmail())){
-            throw new UserNotFoundException("Erro email already exists");
+            throw new UserNotFoundException("Erro email já existente");
         }
 
 
@@ -106,7 +106,7 @@ public class EmployeePerfilServiceImpl implements EmployeePerfilService{
         employeePerfil.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         EmployeePerfil ongPerfil = userRepository.save(employeePerfil);
         Perfil perfil = userLoggedService.getUserLogged().get();
-        logSystemService.createLog(LogSystem.CREATE_EMPLOYEES, ongPerfil.getOngEmployeeId(), perfil.getId(), "create empĺoyee by "+ perfil.getName());
+        logSystemService.createLog(LogSystem.CREATE_EMPLOYEES, ongPerfil.getOngEmployeeId(), perfil.getId(), "funcionário criado por "+ perfil.getName());
         return employeeEntityToConvertEmployeeRequestGetDTO(ongPerfil);
     }
 
@@ -122,7 +122,7 @@ public class EmployeePerfilServiceImpl implements EmployeePerfilService{
         EmployeePerfil byId = userRepository.findByIdEmplloyee(id);
 
         if(byId == null){
-            throw new OperationException("user not found");
+            throw new OperationException("usuário não encontrado");
         }
 
         return employeeEntityToConvertEmployeeRequestGetDTO(byId);
@@ -132,7 +132,7 @@ public class EmployeePerfilServiceImpl implements EmployeePerfilService{
         try{
             ongService.findById(employeePerfil.getOngEmployeeId());
         }catch (Exception ex){
-            throw new OperationException("Ong employee not found");
+            throw new OperationException("Ong não encontrado");
         }
     }
 
@@ -141,10 +141,10 @@ public class EmployeePerfilServiceImpl implements EmployeePerfilService{
         Optional<Perfil> userLogged = userLoggedService.getUserLogged();
         if(userLogged.isPresent() && userLogged.get().getDecriminatorValue().isEmployee()){
             EmployeeRequestGetDTO employeeRequestGetDTO = findById(userLogged.get().getId());
-            logSystemService.createLog(LogSystem.DELETE_EMPLOYEES, employeeRequestGetDTO.getOngEmployeeId(), employeeRequestGetDTO.getId(), "delete empĺoyee "+employeeRequestGetDTO.getName());
+            logSystemService.createLog(LogSystem.DELETE_EMPLOYEES, employeeRequestGetDTO.getOngEmployeeId(), employeeRequestGetDTO.getId(), "funcionario "+employeeRequestGetDTO.getName()+" deletado");
             userRepository.delete(userLogged.get());
         }else{
-            throw new UserNotFoundException("User not found");
+            throw new UserNotFoundException("Usuário não encontrado");
         }
     }
 
@@ -154,7 +154,7 @@ public class EmployeePerfilServiceImpl implements EmployeePerfilService{
         if(userLogged.isPresent() && userLogged.get().getDecriminatorValue().isAdmin()){
 
             EmployeeRequestGetDTO employeeRequestGetDTO = findById(id);
-            logSystemService.createLog(LogSystem.DELETE_EMPLOYEES, employeeRequestGetDTO.getOngEmployeeId(), userLoggedService.getUserLogged().get().getId(), "delete empĺoyee "+employeeRequestGetDTO.getName());
+            logSystemService.createLog(LogSystem.DELETE_EMPLOYEES, employeeRequestGetDTO.getOngEmployeeId(), userLoggedService.getUserLogged().get().getId(), "funcionário "+employeeRequestGetDTO.getName()+" deletado");
 
             userRepository.deleteById(id);
 
@@ -169,7 +169,7 @@ public class EmployeePerfilServiceImpl implements EmployeePerfilService{
         EmployeeRequestGetDTO employeeRequestGetDTO = findById(id);
 
         if(employeeRequestGetDTO.getOngEmployeeId() != 0){
-                logSystemService.createLog(LogSystem.LOGIN, employeeRequestGetDTO.getOngEmployeeId() , employeeRequestGetDTO.getId(), "novo login user employee "+employeeRequestGetDTO.getName());
+                logSystemService.createLog(LogSystem.LOGIN, employeeRequestGetDTO.getOngEmployeeId() , employeeRequestGetDTO.getId(), "novo login usuário funcionário "+employeeRequestGetDTO.getName());
         }
 
         return EmployeeJwtToken.builder().token(authenticateAndGenerateToken.getToken()).expire(authenticateAndGenerateToken.getExpire()).userDTO(employeeRequestGetDTO).build();
@@ -190,7 +190,7 @@ public class EmployeePerfilServiceImpl implements EmployeePerfilService{
         userRepository.save(userLogged);
 
         EmployeeRequestGetDTO employeeRequestGetDTO = findById(userLogged.getId());
-        logSystemService.createLog(LogSystem.UPDATE_EMPLOYEES,employeeRequestGetDTO.getOngEmployeeId(), employeeRequestGetDTO.getId(), "update employee "+employeeRequestGetDTO.getName());
+        logSystemService.createLog(LogSystem.UPDATE_EMPLOYEES,employeeRequestGetDTO.getOngEmployeeId(), employeeRequestGetDTO.getId(), "funcionário atualizado "+employeeRequestGetDTO.getName());
 
     }
 }

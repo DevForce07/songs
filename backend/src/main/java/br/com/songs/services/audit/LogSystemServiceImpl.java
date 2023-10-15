@@ -41,7 +41,7 @@ public class LogSystemServiceImpl implements LogSystemService{
         Optional<Perfil> userLogged = userLoggedService.getUserLogged();
 
         if(userLogged.isEmpty() || userLogged.get().getDecriminatorValue().isEmployee()){
-            throw new OperationException("unauthorized user");
+            throw new OperationException("usuário não autorizado");
         }
 
         List<Logs> allByOngId = repository.findAllByOngIdOrderByCreatedOnDesc(id, pageable);

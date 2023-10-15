@@ -34,7 +34,7 @@ public class LoginPerfilServiceImpl implements UserLoggedService, LoginUserOngSe
 	@Override
 	public PerfilOngRequestGetDTO login(String username, String password) {
 		Optional<Perfil> findByUsernameAndPassword = userRepository.findByUsernameAndPassword(username, password);
-		Perfil user = findByUsernameAndPassword.orElseThrow(() -> new UserNotFoundException("username or password are incorrect"));
+		Perfil user = findByUsernameAndPassword.orElseThrow(() -> new UserNotFoundException("e-mail ou senha incorretos"));
 		return convertPerfilEntityToPerfilRequestGetDTO(user);
 	}
 
@@ -46,7 +46,7 @@ public class LoginPerfilServiceImpl implements UserLoggedService, LoginUserOngSe
 		try {
 			userDetails = (UserDetails) auth.getPrincipal();
 		} catch (Exception e) {
-			throw new UserNotFoundException("User not found");
+			throw new UserNotFoundException("Usuário não encontrado");
 		}
 		return userRepository.findByEmail(userDetails.getUsername());
 	}
