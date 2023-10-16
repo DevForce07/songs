@@ -30,7 +30,7 @@ logging:
   level:
     org:
       hibernate:
-        SQL: DEBUG
+        SQL: OFF
 springdoc:
   swagger-ui:
     disable-swagger-default-url: true
