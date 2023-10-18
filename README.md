@@ -9,7 +9,7 @@
 ```bash
 $ cd backend
 
-$ docker-compose docker-compose up -d
+$ docker compose up -d
 
 $ ./gradlew clean bootRun
 
